@@ -1,5 +1,6 @@
 package cn.hellyuestc.caiyuan.entity;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class User {
@@ -88,6 +89,11 @@ public class User {
 	}
 	public void setIsExpert(int isExpert) {
 		this.isExpert = isExpert;
+	}
+	
+	public String getFormatBirthday() {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		return format.format(birthday);
 	}
 	
 	@Override

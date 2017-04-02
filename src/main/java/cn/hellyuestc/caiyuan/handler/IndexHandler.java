@@ -11,4 +11,9 @@ public class IndexHandler {
 		return "index";
 	}
 	
+	@RequestMapping("/myHomepage")
+	public String myHomepage() {
+		return "myHomepage";
+	}
+	
 }

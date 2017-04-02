@@ -8,6 +8,10 @@
 <body>
 	<h3>首页</h3>
 	<br/>
-	<a href="/caiyuan/login">login</a>
+	<a href="/caiyuan/login">登录</a>
+	<br>
+	<a href="/caiyuan/myHomepage">个人主页</a>
+	<br>
+	<a href="/caiyuan/scanQuestionNew">最新问题</a>
 </body>
 </html>
