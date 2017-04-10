@@ -14,6 +14,9 @@ public class Question {
 	private int answerCount;
 	private Date lastUpdateTime;
 	
+	private User user;
+	private Topic topic;
+	
 	public int getId() {
 		return id;
 	}
@@ -67,6 +70,18 @@ public class Question {
 	}
 	public void setLastUpdateTime(Date lastUpdateTime) {
 		this.lastUpdateTime = lastUpdateTime;
+	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
+	public Topic getTopic() {
+		return topic;
+	}
+	public void setTopic(Topic topic) {
+		this.topic = topic;
 	}
 	
 }
