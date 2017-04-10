@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.hellyuestc.caiyuan.dao.TopicDao"> 
+	
+	<select id="selectAll" resultType="cn.hellyuestc.caiyuan.entity.Topic">
+		select id, name, image_path, introduction 
+		from topic 
+	</select>
+	
+</mapper>
