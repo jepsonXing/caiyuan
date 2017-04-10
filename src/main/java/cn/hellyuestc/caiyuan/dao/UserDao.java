@@ -14,8 +14,10 @@ public interface UserDao {
 	
 	User getUserByName(@Param("name") String name, @Param("password") String password);
 	
-	void updateUser(@Param("id") int id, @Param("name") String name, @Param("gender") String gender, @Param("birthday") Date birthday,
-			@Param("phone") String phone, @Param("email") String email, @Param("address") String address,
-			@Param("job") String job, @Param("introduction") String introduction);
+	String getNameByName(String name);
+	
+	void updateUser(@Param("id") long id, @Param("name") String name, @Param("gender") String gender, @Param("birthday") Date birthday,
+			@Param("phone") String phone, @Param("email") String email, @Param("address") String address, @Param("job") String job, 
+			@Param("introduction") String introduction, @Param("gmt_modified") Date gmtModified);
 	
 }

@@ -23,6 +23,10 @@
 		where name=#{name} and password=#{password}
 	</select>
 	
+	<select id="getNameByName" resultType="String">
+		select name from user where name=#{name}
+	</select>
+	
 	<update id="updateUser">
 		update user
 		set
@@ -33,7 +37,8 @@
 		email = #{email},
 		address = #{address},
 		job = #{job},
-		introduction = #{introduction}
+		introduction = #{introduction},
+		gmt_modified = #{gmt_modified}
 		where id = #{id}
 	</update>
 	

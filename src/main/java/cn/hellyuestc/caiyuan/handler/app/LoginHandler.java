@@ -1,4 +1,4 @@
-package cn.hellyuestc.caiyuan.handler;
+package cn.hellyuestc.caiyuan.handler.app;
 
 import javax.servlet.http.HttpSession;
 
@@ -13,34 +13,13 @@ import cn.hellyuestc.caiyuan.entity.User;
 import cn.hellyuestc.caiyuan.service.LoginService;
 
 @Controller
+@RequestMapping("/app")
 public class LoginHandler {
 	
 	@Autowired
 	private LoginService loginService;
 	
-	@RequestMapping("/login")
-	public String goLogin() {
-		return "login";
-	}
-	
 	@RequestMapping(value="/validateLogin", method=RequestMethod.POST)
-	public String validateLogin(@RequestParam("account") String account, @RequestParam("password") String password, HttpSession session) {
-		User currentUser = null;
-		if (null != (currentUser = loginService.validateLoginByPhone(account, password))) {
-			session.setAttribute("currentUser", currentUser);
-			return "redirect:/";
-		} else if (null != (currentUser = loginService.validateLoginByEmail(account, password))) {
-			session.setAttribute("currentUser", currentUser);
-			return "redirect:/";
-		} else if (null != (currentUser = loginService.validateLoginByName(account, password))) {
-			session.setAttribute("currentUser", currentUser);
-			return "redirect:/";
-		} else {
-			return "redirect:/login";
-		}
-	}
-	
-	@RequestMapping(value="/validateLoginForAPP", method=RequestMethod.POST)
 	public @ResponseBody User validateLoginForAPP(@RequestParam("account") String account, @RequestParam("password") String password, HttpSession session) {
 		User currentUser = null;
 		if (null != (currentUser = loginService.validateLoginByPhone(account, password))) {

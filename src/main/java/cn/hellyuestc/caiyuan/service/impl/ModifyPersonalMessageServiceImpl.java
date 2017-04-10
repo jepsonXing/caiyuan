@@ -2,6 +2,7 @@ package cn.hellyuestc.caiyuan.service.impl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,10 +18,7 @@ public class ModifyPersonalMessageServiceImpl implements ModifyPersonalMessageSe
 	private UserDao userDao;
 
 	@Override
-	public User updateUser(User updateUser, String formatBirthday, User currentUser) {
-		updateUser.setId(currentUser.getId());
-		updateUser.setAvatarPath(currentUser.getAvatarPath());
-		updateUser.setIsExpert(currentUser.getIsExpert());
+	public void updateUser(User updateUser, String formatBirthday) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		try {
 			updateUser.setBirthday(format.parse(formatBirthday));
@@ -29,9 +27,8 @@ public class ModifyPersonalMessageServiceImpl implements ModifyPersonalMessageSe
 		}
 		
 		userDao.updateUser(updateUser.getId(), updateUser.getName(), updateUser.getGender(), updateUser.getBirthday(),
-				updateUser.getPhone(), updateUser.getEmail(), updateUser.getAddress(), updateUser.getJob(), updateUser.getIntroduction());
-		
-		return updateUser;
+				updateUser.getPhone(), updateUser.getEmail(), updateUser.getAddress(), updateUser.getJob(),
+				updateUser.getIntroduction(), new Date());
 	}
 
 }

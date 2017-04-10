@@ -1,11 +1,10 @@
 package cn.hellyuestc.caiyuan.entity;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class User {
 
-	private int id;
+	private long id;
 	private String name;
 	private String password;
 	private String avatarPath;
@@ -16,12 +15,14 @@ public class User {
 	private String address;
 	private String job;
 	private String introduction;
-	private int isExpert;
+	private byte isExpert;
+	private Date gmtCreate;
+	private Date gmtModified;
 	
-	public int getId() {
+	public long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	public String getName() {
@@ -84,24 +85,23 @@ public class User {
 	public void setIntroduction(String introduction) {
 		this.introduction = introduction;
 	}
-	public int getIsExpert() {
+	public byte getIsExpert() {
 		return isExpert;
 	}
-	public void setIsExpert(int isExpert) {
+	public void setIsExpert(byte isExpert) {
 		this.isExpert = isExpert;
 	}
-	
-	public String getFormatBirthday() {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		return format.format(birthday);
+	public Date getGmtCreate() {
+		return gmtCreate;
 	}
-	
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", password=" + password + ", avatarPath=" + avatarPath
-				+ ", gender=" + gender + ", birthday=" + birthday + ", phone=" + phone + ", email=" + email
-				+ ", address=" + address + ", job=" + job + ", introduction=" + introduction + ", isExpert=" + isExpert
-				+ "]";
+	public void setGmtCreate(Date gmtCreate) {
+		this.gmtCreate = gmtCreate;
+	}
+	public Date getGmtModified() {
+		return gmtModified;
+	}
+	public void setGmtModified(Date gmtModified) {
+		this.gmtModified = gmtModified;
 	}
 	
 }
