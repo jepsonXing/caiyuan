@@ -8,11 +8,6 @@
 </head>
 <body>
 修改个人信息<br/>
-	<form action="/caiyuan/modifyAvatar">
-		<input type="file">
-		<input type="submit" value="更换头像">
-	</form>
-
 	<form action="/caiyuan/excuteModifyPersonalMessage" method="post">
 		<input type="text" name="name" value="${currentUser.name}"/><br>
 		<input type="radio" name="gender" value="男" checked>男

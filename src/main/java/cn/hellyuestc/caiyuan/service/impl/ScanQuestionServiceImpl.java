@@ -9,13 +9,9 @@ import cn.hellyuestc.caiyuan.service.ScanQuestionService;
 
 @Service
 public class ScanQuestionServiceImpl implements ScanQuestionService {
-	
-	private static int timeLineId;
-	
+
 	@Override
 	public List<Question> queryNewQuestion() {
-		
-		
 		return null;
 	}
 
