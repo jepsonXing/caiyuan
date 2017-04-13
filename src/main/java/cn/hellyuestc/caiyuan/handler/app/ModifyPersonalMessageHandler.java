@@ -28,12 +28,12 @@ public class ModifyPersonalMessageHandler {
 	public @ResponseBody Map<String, String> excuteModifyPersonalMessage(User updateUser, @RequestParam("formatBirthday") String formatBirthday) {
 		Map<String, String> message = new HashMap<String, String>();
 		if (commonService.isUserExist(updateUser.getName())) {
-			message.put("message", "ÓÃ»§ÒÑ´æÔÚ");
+			message.put("message", "ç”¨æˆ·å·²å­˜åœ¨");
 			return message;
 		}
 		
 		service.updateUser(updateUser, formatBirthday);
-		message.put("message", "ĞŞ¸Ä³É¹¦");
+		message.put("message", "ä¿®æ”¹æˆåŠŸ");
 		return message;
 	}
 

@@ -6,6 +6,6 @@ import cn.hellyuestc.caiyuan.entity.Topic;
 
 public interface TopicDao {
 
-	List<Topic> selectAll();
+	List<Topic> listSelectAll();
 	
 }

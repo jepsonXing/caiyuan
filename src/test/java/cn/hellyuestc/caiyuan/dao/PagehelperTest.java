@@ -16,7 +16,7 @@ public class PagehelperTest {
 		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring-applicationContext.xml");
 		TopicDao topicDao = context.getBean(TopicDao.class);
 		PageHelper.startPage(2, 5);
-		List<Topic> topicList = topicDao.selectAll();
+		List<Topic> topicList = topicDao.listSelectAll();
 		for (Topic topic : topicList) {
 			System.out.println(topic.getName());
 		}
