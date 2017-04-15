@@ -4,32 +4,35 @@ import java.util.Date;
 
 public class Question {
 	
-	private int id;
-	private int userId;
-	private int topicId;
+	private long id;
+	private long userId;
+	private long topicId;
 	private String title;
 	private String content;
-	private Date createTime;
 	private int scanCount;
 	private int answerCount;
-	private Date lastUpdateTime;
+	private Date gmtCreate;
+	private Date gmtModified;
 	
-	public int getId() {
+	private User user;
+	private Topic topic;
+	
+	public long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
-	public int getUserId() {
+	public long getUserId() {
 		return userId;
 	}
-	public void setUserId(int userId) {
+	public void setUserId(long userId) {
 		this.userId = userId;
 	}
-	public int getTopicId() {
+	public long getTopicId() {
 		return topicId;
 	}
-	public void setTopicId(int topicId) {
+	public void setTopicId(long topicId) {
 		this.topicId = topicId;
 	}
 	public String getTitle() {
@@ -44,12 +47,6 @@ public class Question {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public Date getCreateTime() {
-		return createTime;
-	}
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
 	public int getScanCount() {
 		return scanCount;
 	}
@@ -62,11 +59,29 @@ public class Question {
 	public void setAnswerCount(int answerCount) {
 		this.answerCount = answerCount;
 	}
-	public Date getLastUpdateTime() {
-		return lastUpdateTime;
+	public Date getGmtCreate() {
+		return gmtCreate;
 	}
-	public void setLastUpdateTime(Date lastUpdateTime) {
-		this.lastUpdateTime = lastUpdateTime;
+	public void setGmtCreate(Date gmtCreate) {
+		this.gmtCreate = gmtCreate;
+	}
+	public Date getGmtModified() {
+		return gmtModified;
+	}
+	public void setGmtModified(Date gmtModified) {
+		this.gmtModified = gmtModified;
+	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
+	public Topic getTopic() {
+		return topic;
+	}
+	public void setTopic(Topic topic) {
+		this.topic = topic;
 	}
 	
 }

@@ -5,7 +5,7 @@
 
 <mapper namespace="cn.hellyuestc.caiyuan.dao.TopicDao"> 
 	
-	<select id="listSelectAll" resultType="cn.hellyuestc.caiyuan.entity.Topic">
+	<select id="selectAll" resultType="Topic">
 		select id, name, image_path, introduction 
 		from topic 
 	</select>

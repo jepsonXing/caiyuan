@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.hellyuestc.caiyuan.dao.QuestionDao"> 
+	
+	<resultMap type="Question" id="questionResultMap">
+		<id property="id" column="id"/>
+		<result property="userId" column="user_id"/>
+		<result property="topicId" column="topic_id"/>
+		<result property="title" column="title"/>
+		<result property="content" column="content"/>
+		<result property="scanCount" column="scan_count"/>
+		<result property="answerCount" column="answer_count"/>
+		<result property="gmtCreate" column="gmt_create"/>
+		<result property="gmtModified" column="gmt_modified"/>
+		<association property="user" javaType="User">
+			<id property="id" column="id"/>
+			<result property="name" column="name"/>
+			<result property="avatarPath" column="avatar_path"/>
+			<result property="gender" column="gender"/>
+			<result property="birthday" column="birthday"/>
+			<result property="phone" column="phone"/>
+			<result property="email" column="email"/>
+			<result property="address" column="address"/>
+			<result property="job" column="job"/>
+			<result property="introduction" column="introduction"/>
+			<result property="isExpert" column="is_expert"/>
+		</association>
+		<association property="topic" javaType="Topic">
+			<id property="id" column="id"/>
+			<result property="name" column="name"/>
+			<result property="imagePath" column="image_path"/>
+			<result property="introduction" column="introduction"/>
+		</association>
+	</resultMap>
+	
+	<select id="selectAllOrderGmtModifiedTime" parameterType="java.util.Date" resultType="Question">
+		select q.id, q.title, q.content, q.scan_count, q.answer_count, q.gmt_create, q.gmt_modified,
+			u.id, u.name, u.avatar_path, u.is_expert,
+			t.id, t.name
+		from 
+		question q 
+		inner join user u
+		inner join topic t
+		where q.gmt_modified > #{lastRefreshTime}
+		order by q.gmt_modified
+		limit 10
+	</select>
+	
+</mapper>

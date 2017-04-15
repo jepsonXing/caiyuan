@@ -21,7 +21,7 @@ public class TopicServiceImpl implements TopicService {
 	@Override
 	public List<Topic> listNextPage(int pageNumber) {
 		PageHelper.startPage(pageNumber, Page.PAGE_NUM);
-		return topicDao.listSelectAll();
+		return topicDao.selectAll();
 	}
 
 }

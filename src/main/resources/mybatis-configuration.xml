@@ -14,6 +14,10 @@
         <setting name="mapUnderscoreToCamelCase" value="true" />
 	</settings>
 	
+	<typeAliases>
+		<package name="cn.hellyuestc.caiyuan.entity"/>
+	</typeAliases>
+	
 	<plugins>
         <plugin interceptor="com.github.pagehelper.PageHelper">
             <property name="dialect" value="mysql"/>

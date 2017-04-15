@@ -4,20 +4,20 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="cn.hellyuestc.caiyuan.dao.UserDao"> 
-	
-	<select id="getUserByPhone" resultType="cn.hellyuestc.caiyuan.entity.User">
+
+	<select id="getUserByPhone" resultType="User">
 		select id, name, avatar_path, gender, birthday, phone, email, address, job, introduction, is_expert 
 		from user
 		where name=#{phone} and password=#{password}
 	</select>
 	
-	<select id="getUserByEmail" resultType="cn.hellyuestc.caiyuan.entity.User">
+	<select id="getUserByEmail" resultType="User">
 		select id, name, avatar_path, gender, birthday, phone, email, address, job, introduction, is_expert 
 		from user
 		where name=#{email} and password=#{password}
 	</select>
 	
-	<select id="getUserByName" resultType="cn.hellyuestc.caiyuan.entity.User">
+	<select id="getUserByName" resultType="User">
 		select id, name, avatar_path, gender, birthday, phone, email, address, job, introduction, is_expert 
 		from user
 		where name=#{name} and password=#{password}
