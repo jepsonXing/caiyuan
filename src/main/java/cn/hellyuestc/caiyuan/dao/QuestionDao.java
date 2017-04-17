@@ -7,6 +7,8 @@ import cn.hellyuestc.caiyuan.entity.Question;
 
 public interface QuestionDao {
 
-	List<Question> selectAllOrderGmtModifiedTime(Date lastRefreshTime);
+	List<Question> selectGreaterThanLastRefreshTime(Date lastRefreshTime);
+	
+	List<Question> selectLessThanLastViewTime(Date lastViewTime);
 	
 }

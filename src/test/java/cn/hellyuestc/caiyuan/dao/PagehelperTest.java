@@ -31,8 +31,8 @@ public class PagehelperTest {
 		ApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring-applicationContext.xml");
 		QuestionDao questionDao = context.getBean(QuestionDao.class);
 		Date lastRefreshTime = new Date(2017, 3, 1, 1, 1, 1);
-		List<Question> questionList = questionDao.selectAllOrderGmtModifiedTime(lastRefreshTime);
-		System.out.println(questionList);
+//		List<Question> questionList = questionDao.selectAllOrderGmtModifiedTime(lastRefreshTime);
+//		System.out.println(questionList);
 	}
 	
 }
