@@ -19,7 +19,7 @@ public class LoginHandler {
 	@Autowired
 	private LoginService loginService;
 	
-	@RequestMapping(value="/validateLogin", method=RequestMethod.POST)
+	@RequestMapping(value="/login", method=RequestMethod.POST)
 	public @ResponseBody User validateLoginForAPP(@RequestParam("account") String account, @RequestParam("password") String password, HttpSession session) {
 		User currentUser = null;
 		if (null != (currentUser = loginService.validateLoginByPhone(account, password))) {
