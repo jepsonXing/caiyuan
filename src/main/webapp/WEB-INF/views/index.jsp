@@ -43,7 +43,8 @@
 	<hr>
 	<a href="/caiyuan/app/question/new/getPrePage/2016-04-12 20:44:56">刷新问题（最新）</a>
 	<a href="/caiyuan/app/question/new/getNextPage/2017-04-14 20:44:54">下一页问题（最新）</a>
-	<a href="/caiyuan/app/question/hot/getNextPage/1">下一页问题（最热）</a>
+	<a href="/caiyuan/app/question/hot/getNextPage/1">下一页问题（最热）</a><br>
+	<a href="/caiyuan/app/test">test</a>
 
 </body>
 </html>
