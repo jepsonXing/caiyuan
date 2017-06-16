@@ -9,7 +9,7 @@
 
 	<mvc:annotation-driven></mvc:annotation-driven>
 
-	<context:component-scan base-package="cn.hellyuestc.caiyuan.handler.app"></context:component-scan>
+	<context:component-scan base-package="cn.hellyuestc.caiyuan.handler"></context:component-scan>
 
 	<!-- 
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
