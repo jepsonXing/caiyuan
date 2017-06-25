@@ -11,7 +11,7 @@ public class SessionHandler {
 	
 	@RequestMapping(value="/sessions", method=RequestMethod.POST)
 	public Response loginByAccount() {
-		
+		return null;
 	}
 
 }
