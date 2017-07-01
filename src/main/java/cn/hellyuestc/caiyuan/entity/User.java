@@ -15,6 +15,8 @@ public class User {
 	private String address;
 	private String job;
 	private String introduction;
+	private int status;
+	private String activationCode;
 	private byte isExpert;
 	private Date gmtCreate;
 	private Date gmtModified;
@@ -84,6 +86,18 @@ public class User {
 	}
 	public void setIntroduction(String introduction) {
 		this.introduction = introduction;
+	}
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	public String getActivationCode() {
+		return activationCode;
+	}
+	public void setActivationCode(String activationCode) {
+		this.activationCode = activationCode;
 	}
 	public byte getIsExpert() {
 		return isExpert;

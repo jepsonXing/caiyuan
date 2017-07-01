@@ -7,6 +7,12 @@ import org.apache.ibatis.annotations.Param;
 import cn.hellyuestc.caiyuan.entity.User;
 
 public interface UserDao {
+	
+	int selectEmailCount(@Param("email") String email);
+	
+	
+	
+	
 
 	User getUserByPhone(@Param("phone") String phone, @Param("password") String password);
 	

@@ -5,6 +5,12 @@
 
 <mapper namespace="cn.hellyuestc.caiyuan.dao.UserDao"> 
 
+	<select id="selectEmailCount" resultType="int">
+		select count(*) from user where email = #{email}
+	</select>
+
+
+
 	<select id="getUserByPhone" resultType="User">
 		select id, name, avatar_path, gender, birthday, phone, email, address, job, introduction, is_expert 
 		from user
