@@ -8,8 +8,9 @@ import cn.hellyuestc.caiyuan.entity.User;
 
 public interface UserDao {
 	
-	int selectEmailCount(@Param("email") String email);
+	int selectEmailCount(String email);
 	
+	void insertUser(User user);
 	
 	
 	

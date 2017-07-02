@@ -15,6 +15,8 @@ public class User {
 	private String address;
 	private String job;
 	private String introduction;
+	private int followingCount;
+	private int followerCount;
 	private int status;
 	private String activationCode;
 	private byte isExpert;
@@ -86,6 +88,18 @@ public class User {
 	}
 	public void setIntroduction(String introduction) {
 		this.introduction = introduction;
+	}
+	public int getFollowingCount() {
+		return followingCount;
+	}
+	public void setFollowingCount(int followingCount) {
+		this.followingCount = followingCount;
+	}
+	public int getFollowerCount() {
+		return followerCount;
+	}
+	public void setFollowerCount(int followerCount) {
+		this.followerCount = followerCount;
 	}
 	public int getStatus() {
 		return status;

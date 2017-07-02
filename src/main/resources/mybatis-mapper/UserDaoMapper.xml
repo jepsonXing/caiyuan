@@ -9,6 +9,12 @@
 		select count(*) from user where email = #{email}
 	</select>
 
+	<insert id="insertUser" >
+		insert into user(name, password, avatar_url, email, activation_code, gmt_create, gmt_modified)
+		values(#{name}, #{password}, #{avatarUrl}, #{email}, #{activationCode}, #{gmtCreate}, #{gmtModified})
+	</insert>
+
+
 
 
 	<select id="getUserByPhone" resultType="User">

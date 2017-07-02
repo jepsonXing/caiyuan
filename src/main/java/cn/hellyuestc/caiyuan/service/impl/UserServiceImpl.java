@@ -7,16 +7,25 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Service;
 
+import cn.hellyuestc.caiyuan.async.MailTask;
 import cn.hellyuestc.caiyuan.dao.UserDao;
 import cn.hellyuestc.caiyuan.entity.User;
 import cn.hellyuestc.caiyuan.service.UserService;
 import cn.hellyuestc.caiyuan.util.MyUtil;
 
+@Service
 public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private TaskExecutor taskExecutor;
+	@Autowired
+	private JavaMailSender javaMailSender;
 
 	@Override
 	public Map<String, String> addUserByEmail(String email, String password, String confrimPassword) {
@@ -65,12 +74,16 @@ public class UserServiceImpl implements UserService {
 		 */
 		User user = new User();
 		user.setName(email);
-		user.setEmail(email);
 		user.setPassword(MyUtil.bcrypt(password));
+		user.setAvatarPath(MyUtil.getCaiyuanProperties().getProperty("QINIU_IMAGE_URL") + "user_avatar_default.png");
+		user.setEmail(email);
 		user.setActivationCode(MyUtil.createRandomCode());
 		user.setGmtCreate(new Date());
 		user.setGmtModified(new Date());
 		
+		taskExecutor.execute(new MailTask(user.getActivationCode(), user.getEmail(), javaMailSender, 1));
+		
+		userDao.insertUser(user);
 		map.put("ok", "系统已向您的邮箱发送了一份邮件，验证后即可登录");
 		return map;
 		

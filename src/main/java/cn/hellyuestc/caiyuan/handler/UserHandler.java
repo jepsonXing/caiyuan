@@ -22,12 +22,12 @@ public class UserHandler {
 	/*
 	 * 邮箱注册
 	 */
-	@RequestMapping(value="?type", method=RequestMethod.PUT)
+	@RequestMapping(value="?type=email", method=RequestMethod.PUT)
 	@ResponseBody
 	public Response addUserByEmail(String email, String password, String confrimPassword) {
 		Map<String, String> map = userService.addUserByEmail(email, password, confrimPassword);
 		if (map.get("ok") == null) {
-			return new Response(new Status(201, "系统已向您的邮箱发送一份邮件，验证后即可登录"));
+			return new Response(new Status(201, "系统已向您的邮箱发送了一份邮件，验证后即可登录"));
 		} else {
 			return new Response(new Status(400, "error"), map);
 		}

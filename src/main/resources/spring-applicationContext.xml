@@ -9,7 +9,7 @@
 
 	<context:component-scan base-package="cn.hellyuestc.caiyuan.service"></context:component-scan>
 
-	<context:property-placeholder location="classpath:jdbc.properties" />
+	<context:property-placeholder location="classpath:caiyuan.properties" />
 
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="driverClass" value="${driverClass}" />
@@ -48,5 +48,17 @@
 		<property name="port" value="6379" />
 		<property name="database" value="10" />
 	</bean>
+	
+	<!--邮件处理-->
+    <bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="${mail.host}"/>
+        <property name="username" value="${mail.username}"/>
+        <property name="password" value="${mail.password}"/>
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.auth">true</prop>
+            </props>
+        </property>
+    </bean>
 
 </beans>
