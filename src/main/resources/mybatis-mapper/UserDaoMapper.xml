@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.hellyuestc.caiyuan.dao.UserDao"> 
+
+	<select id="selectEmailCount" resultType="int">
+		select count(*) from user where email = #{email}
+	</select>
+
+	<insert id="insertUser" >
+		insert into user(name, password, avatar_url, birthday, email, activation_code, gmt_create, gmt_modified)
+		values(#{name}, #{password}, #{avatarUrl}, #{birthday}, #{email}, #{activationCode}, #{gmtCreate}, #{gmtModified})
+	</insert>
+
+</mapper>
