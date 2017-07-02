@@ -5,9 +5,11 @@
 
 <mapper namespace="cn.hellyuestc.caiyuan.dao.TopicDao"> 
 	
+	<!-- 
 	<select id="selectAll" resultType="Topic">
 		select id, name, image_path, introduction 
 		from topic 
 	</select>
+	 -->
 	
 </mapper>

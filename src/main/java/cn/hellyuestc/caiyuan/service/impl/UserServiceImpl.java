@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.mail.MessagingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -22,10 +24,10 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private UserDao userDao;
-	@Autowired
-	private TaskExecutor taskExecutor;
-	@Autowired
-	private JavaMailSender javaMailSender;
+//	@Autowired
+//	private TaskExecutor taskExecutor;
+//	@Autowired
+//	private JavaMailSender javaMailSender;
 
 	@Override
 	public Map<String, String> addUserByEmail(String email, String password, String confrimPassword) {
@@ -75,13 +77,19 @@ public class UserServiceImpl implements UserService {
 		User user = new User();
 		user.setName(email);
 		user.setPassword(MyUtil.bcrypt(password));
-		user.setAvatarPath(MyUtil.getCaiyuanProperties().getProperty("QINIU_IMAGE_URL") + "user_avatar_default.png");
+		user.setAvatarUrl(MyUtil.getCaiyuanProperties().getProperty("QINIU_IMAGE_URL") + "user_avatar/default.png");
+		user.setBirthday(new Date());
 		user.setEmail(email);
 		user.setActivationCode(MyUtil.createRandomCode());
 		user.setGmtCreate(new Date());
 		user.setGmtModified(new Date());
 		
-		taskExecutor.execute(new MailTask(user.getActivationCode(), user.getEmail(), javaMailSender, 1));
+//		taskExecutor.execute(new MailTask(user.getActivationCode(), user.getEmail(), javaMailSender, 1));
+		try {
+			MyUtil.sendEamil(user.getActivationCode(), user.getEmail(), 1);
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
 		
 		userDao.insertUser(user);
 		map.put("ok", "系统已向您的邮箱发送了一份邮件，验证后即可登录");

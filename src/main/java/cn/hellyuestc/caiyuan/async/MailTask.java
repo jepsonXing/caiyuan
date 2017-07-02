@@ -11,6 +11,7 @@ import cn.hellyuestc.caiyuan.util.MyUtil;
 public class MailTask implements Runnable {
 
 	private String code;
+	private String from  = "18483661669@163.com";
 	private String email;
 	private JavaMailSender javaMailSender;
 	private int operation;
@@ -30,7 +31,7 @@ public class MailTask implements Runnable {
 			@Override
 			public void prepare(MimeMessage mimeMessage) throws Exception {
 				MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-				mimeMessageHelper.setFrom(MyUtil.getCaiyuanProperties().getProperty("mail.username"));
+				mimeMessageHelper.setFrom(from);
 				mimeMessageHelper.setTo(email);
 				mimeMessageHelper.setSubject("菜缘");
 				StringBuilder sb = new StringBuilder();

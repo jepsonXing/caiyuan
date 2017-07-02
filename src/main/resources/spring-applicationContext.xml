@@ -40,6 +40,7 @@
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
 	</bean>
 
+	<!-- 
 	<bean class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration" />
 
 	<bean class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
@@ -48,8 +49,9 @@
 		<property name="port" value="6379" />
 		<property name="database" value="10" />
 	</bean>
+	 -->
 	
-	<!--邮件处理-->
+	<!-- 邮件处理
     <bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="${mail.host}"/>
         <property name="username" value="${mail.username}"/>
@@ -60,5 +62,14 @@
             </props>
         </property>
     </bean>
+     -->
+    
+    <!-- 线程池
+    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="10"/>
+        <property name="maxPoolSize" value="20"/>
+        <property name="queueCapacity" value="20"/>
+    </bean>
+	 -->
 
 </beans>

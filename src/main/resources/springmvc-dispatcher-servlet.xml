@@ -7,7 +7,7 @@
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
 	<!-- 自动扫描包 -->
-	<context:component-scan base-package="cn.hellyuestc.caiyuan.handler"></context:component-scan>
+	<context:component-scan base-package="cn.hellyuestc.caiyuan"></context:component-scan>
 
 	<!-- 支持MVC注解驱动 -->
 	<mvc:annotation-driven></mvc:annotation-driven>

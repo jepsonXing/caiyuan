@@ -5,6 +5,7 @@
 
 <mapper namespace="cn.hellyuestc.caiyuan.dao.QuestionDao"> 
 	
+	<!-- 
 	<resultMap type="Question" id="questionResultMap">
 		<id property="id" column="id"/>
 		<result property="userId" column="user_id"/>
@@ -64,5 +65,6 @@
 		order by q.gmt_modified desc
 		limit 5
 	</select>
+	 -->
 	
 </mapper>

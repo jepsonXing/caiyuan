@@ -7,7 +7,7 @@ public class User {
 	private long id;
 	private String name;
 	private String password;
-	private String avatarPath;
+	private String avatarUrl;
 	private String gender;
 	private Date birthday;
 	private String phone;
@@ -41,11 +41,11 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getAvatarPath() {
-		return avatarPath;
+	public String getAvatarUrl() {
+		return avatarUrl;
 	}
-	public void setAvatarPath(String avatarPath) {
-		this.avatarPath = avatarPath;
+	public void setAvatarUrl(String avatarUrl) {
+		this.avatarUrl = avatarUrl;
 	}
 	public String getGender() {
 		return gender;

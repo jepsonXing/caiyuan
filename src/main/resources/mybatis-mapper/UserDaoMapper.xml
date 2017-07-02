@@ -10,13 +10,13 @@
 	</select>
 
 	<insert id="insertUser" >
-		insert into user(name, password, avatar_url, email, activation_code, gmt_create, gmt_modified)
-		values(#{name}, #{password}, #{avatarUrl}, #{email}, #{activationCode}, #{gmtCreate}, #{gmtModified})
+		insert into user(name, password, avatar_url, birthday, email, activation_code, gmt_create, gmt_modified)
+		values(#{name}, #{password}, #{avatarUrl}, #{birthday}, #{email}, #{activationCode}, #{gmtCreate}, #{gmtModified})
 	</insert>
 
 
 
-
+	<!-- 
 	<select id="getUserByPhone" resultType="User">
 		select id, name, avatar_path, gender, birthday, phone, email, address, job, introduction, is_expert 
 		from user
@@ -53,5 +53,6 @@
 		gmt_modified = #{gmt_modified}
 		where id = #{id}
 	</update>
+	 -->
 	
 </mapper>
