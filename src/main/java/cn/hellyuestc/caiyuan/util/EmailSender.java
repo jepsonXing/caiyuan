@@ -44,7 +44,7 @@ public class EmailSender {
 	 */
 	public static void sendActivationLink(String activationCode, String email) throws MessagingException {
 		beforeSend(email);
-		text = "<html><head></head><body><a href='https://www.hellyuestc.cn/activate?code=" + activationCode + "' >点击激活您的邮箱</a></body>";
+		text = "<html><head></head><body><a href='https://www.hellyuestc.cn/users/" + email + "/" + activationCode + "' >点击激活您的邮箱</a></body>";
 		message.setSubject("菜缘");
         message.setContent(text,"text/html;charset=UTF-8");
         executeSend();

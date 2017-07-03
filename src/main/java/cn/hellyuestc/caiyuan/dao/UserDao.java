@@ -8,4 +8,10 @@ public interface UserDao {
 	
 	void insertUser(User user);
 	
+	int selectStatusByEmail(String email);
+	
+	String selectActivationCodeByEmail(String email);
+	
+	void updateUser(int status);
+	
 }

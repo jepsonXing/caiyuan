@@ -4,6 +4,14 @@ import java.util.Map;
 
 public interface UserService {
 	
+	/*
+	 * 邮箱注册
+	 */
 	public Map<String, String> addUserByEmail(String email, String password, String confrimPassword);
 
+	/*
+	 * 激活邮箱
+	 */
+	public Map<String, String> activateEmail(String email, String activationCode);
+	
 }

@@ -21,18 +21,20 @@ import cn.hellyuestc.caiyuan.util.MyUtil;
 @Service
 public class UserServiceImpl implements UserService {
 	
+	
 	@Autowired
 	private UserDao userDao;
 
+	/*
+	 * 邮箱注册
+	 */
 	@Override
 	public Map<String, String> addUserByEmail(String email, String password, String confrimPassword) {
 		Map<String, String> map = new HashMap<>();
 		Pattern pattern = null;
 		Matcher matcher = null;
 		
-		/*
-		 * 邮箱格式错误
-		 */
+		// 邮箱格式错误
 		pattern = Pattern.compile("^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\\.[a-zA-Z0-9_-]{2,3}){1,2})$");
 		matcher = pattern.matcher(email);
 		if (!matcher.matches()) {
@@ -40,9 +42,7 @@ public class UserServiceImpl implements UserService {
 			return map;
 		}
 		
-		/*
-		 * 密码格式错误，请输入6-20个字符
-		 */
+		// 密码格式错误，请输入6-20个字符
 		pattern = Pattern.compile("^\\w{6,20}$");
 		matcher = pattern.matcher(password);
 		if (!matcher.matches()) {
@@ -50,25 +50,19 @@ public class UserServiceImpl implements UserService {
 			return map;
 		}
 		
-		/*
-		 * 密码不一致
-		 */
+		// 密码不一致
 		if (!password.equals(confrimPassword)) {
 			map.put("confrimPassword-error", "密码不一致");
 			return map;
 		}
 		
-		/*
-		 * 邮箱已被注册
-		 */
+		// 邮箱已被注册
 		if (userDao.selectEmailCount(email) > 0) {
 			map.put("email-error", "邮箱已注册");
 			return map;
 		}
 		
-		/*
-		 * 成功注册
-		 */
+		// 注册成功
 		User user = new User();
 		user.setName(email);
 		user.setPassword(MyUtil.bcrypt(password));
@@ -91,4 +85,35 @@ public class UserServiceImpl implements UserService {
 		
 	}
 
+	/*
+	 * 激活邮箱
+	 */
+	@Override
+	public Map<String, String> activateEmail(String email, String activationCode) {
+		Map<String, String> map = new HashMap<>();
+		
+		//邮箱未注册
+		if (userDao.selectEmailCount(email) == 0) {
+			map.put("email-error", "邮箱未注册");
+			return map;
+		}
+		
+		//邮箱已激活
+		if (userDao.selectStatusByEmail(email) == 1) {
+			map.put("activate-errot", "邮箱已激活");
+			return map;
+		}
+		
+		//激活码不正确
+		if (userDao.selectActivationCodeByEmail(email) != activationCode) {
+			map.put("activationCode-error", "激活码不正确");
+			return map;
+		}
+		
+		//激活成功
+		userDao.updateUser(1);
+		map.put("ok", "激活成功");
+		return map;
+	}
+	
 }

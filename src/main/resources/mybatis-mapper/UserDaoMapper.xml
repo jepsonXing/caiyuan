@@ -9,9 +9,21 @@
 		select count(*) from user where email = #{email}
 	</select>
 
-	<insert id="insertUser" >
+	<insert id="insertUser">
 		insert into user(name, password, avatar_url, birthday, email, activation_code, gmt_create, gmt_modified)
 		values(#{name}, #{password}, #{avatarUrl}, #{birthday}, #{email}, #{activationCode}, #{gmtCreate}, #{gmtModified})
 	</insert>
 
+	<select id="selectStatusByEmail" resultType="int">
+		select status from user where email = #{email}
+	</select>
+	
+	<select id="selectActivationCodeByEmail" resultType="String">
+		select activation_code from user where email = #{email}
+	</select>
+	
+	<update id="updateUser">
+		update user set status = #{status}
+	</update>
+	
 </mapper>

@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,13 +25,36 @@ public class UserController {
 	 */
 	@RequestMapping(value="?type=email", method=RequestMethod.POST)
 	@ResponseBody
-	public Response addUserByEmail(String email, String password, String confrimPassword) {
+	public Response registeByEmail(String email, String password, String confrimPassword) {
 		Map<String, String> map = userService.addUserByEmail(email, password, confrimPassword);
 		if (map.get("ok") != null) {
 			return new Response(new Status(201, "系统已向您的邮箱发送了一份邮件，验证后即可登录"));
 		} else {
 			return new Response(new Status(400, "error"), map);
 		}
+	}
+	
+	/*
+	 * 激活邮箱
+	 */
+	@RequestMapping(value="/{email}/{activationCode}", method=RequestMethod.GET)
+	@ResponseBody
+	public Response activateEmail(@PathVariable String email, @PathVariable String activationCode) {
+		Map<String, String> map = userService.activateEmail(email, activationCode);
+		if (map.get("ok") != null) {
+			return new Response(new Status(201, "激活邮箱成功"));
+		} else {
+			return new Response(new Status(400, "error"), map);
+		}
+	}
+
+	/*
+	 * 更换邮箱
+	 */
+	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
+	@ResponseBody
+	public Response changeEmail() {
+		return null;
 	}
 
 }
