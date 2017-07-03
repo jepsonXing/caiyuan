@@ -1,15 +1,7 @@
 package cn.hellyuestc.caiyuan.util;
 
 import java.util.Date;
-import java.util.Properties;
 import java.util.UUID;
-
-import javax.mail.Address;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -20,6 +12,10 @@ public class MyUtil {
 	 */
 	public static String bcrypt(String password) {
 		return BCrypt.hashpw(password, BCrypt.gensalt());
+	}
+	
+	public static boolean checkPassword(String password, String hash) {
+		return BCrypt.checkpw(password, hash);
 	}
 	
 	/*

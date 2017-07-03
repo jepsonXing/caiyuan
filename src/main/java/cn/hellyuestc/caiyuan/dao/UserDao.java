@@ -14,4 +14,14 @@ public interface UserDao {
 	
 	void updateUser(int status);
 	
+	long selectIdByPhone(String phone);
+	
+	long selectIdByEmail(String email);
+	
+	byte selectStatusById(long id);
+	
+	String selectPasswordById(long id);
+	
+	User selectUserById(long id);
+	
 }

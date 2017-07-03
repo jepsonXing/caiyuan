@@ -26,4 +26,27 @@
 		update user set status = #{status}
 	</update>
 	
+	<select id="selectIdByPhone" resultType="long">
+		select ifnull((select id from user where phone=#{phone}), 0)
+	</select>
+	
+	<select id="selectIdByEmail" resultType="long">
+		select ifnull((select id from user where email=#{email}), 0)
+	</select>
+	
+	<select id="selectStatusById" resultType="byte">
+		select status from user where id=#{id}
+	</select>
+	
+	<select id="selectPasswordById" resultType="String">
+		select password from user where id=#{id}
+	</select>
+	
+	<select id="selectUserById" resultType="User">
+		select id, name, avatar_url, gender, birthday, phone, email, address,
+			job, introduction, following_count, follower_count, is_expert, gmt_create
+		from user
+		where id=#{id}
+	</select>
+	
 </mapper>
