@@ -2,8 +2,6 @@ package cn.hellyuestc.caiyuan.service;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
-
 public interface SessionService {
 	
 	/*
@@ -14,6 +12,11 @@ public interface SessionService {
 	/*
 	 * 登录
 	 */
-	public Map<String, Object> login(String account, String password, HttpServletResponse response);
+	public Map<String, Object> login(String account, String password);
+	
+	/*
+	 * 登出
+	 */
+	public Map<String, String> logout(String session);
 	
 }

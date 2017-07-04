@@ -23,7 +23,7 @@
 	</select>
 	
 	<update id="updateUser">
-		update user set status = #{status}
+		update user set status = #{status} where email=#{email}
 	</update>
 	
 	<select id="selectIdByPhone" resultType="long">

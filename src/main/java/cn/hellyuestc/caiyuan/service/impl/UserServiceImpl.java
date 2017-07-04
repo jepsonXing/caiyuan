@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
 	 * 邮箱注册
 	 */
 	@Override
-	public Map<String, String> addUserByEmail(String email, String password, String confrimPassword) {
+	public Map<String, String> addUserByEmail(String email, String password, String confirmPassword) {
 		Map<String, String> map = new HashMap<>();
 		Pattern pattern = null;
 		Matcher matcher = null;
@@ -46,12 +46,12 @@ public class UserServiceImpl implements UserService {
 		pattern = Pattern.compile("^\\w{6,20}$");
 		matcher = pattern.matcher(password);
 		if (!matcher.matches()) {
-			map.put("password-error", "请输入1-20个字符的密码");
+			map.put("password-error", "密码格式错误，请输入1-20个字符的密码");
 			return map;
 		}
 		
 		// 密码不一致
-		if (!password.equals(confrimPassword)) {
+		if (!password.equals(confirmPassword)) {
 			map.put("confrimPassword-error", "密码不一致");
 			return map;
 		}
@@ -105,13 +105,14 @@ public class UserServiceImpl implements UserService {
 		}
 		
 		//激活码不正确
-		if (userDao.selectActivationCodeByEmail(email) != activationCode) {
+		if (!userDao.selectActivationCodeByEmail(email).equals(activationCode)) {
 			map.put("activationCode-error", "激活码不正确");
+			System.out.println();
 			return map;
 		}
 		
 		//激活成功
-		userDao.updateUser(1);
+		userDao.updateUser(email, 1);
 		map.put("ok", "激活成功");
 		return map;
 	}

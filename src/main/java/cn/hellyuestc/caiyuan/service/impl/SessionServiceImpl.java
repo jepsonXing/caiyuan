@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,7 +49,7 @@ public class SessionServiceImpl implements SessionService {
 	 * 登录
 	 */
 	@Override
-	public Map<String, Object> login(String account, String password, HttpServletResponse response) {
+	public Map<String, Object> login(String account, String password) {
 		Map<String, Object> map = new HashMap<>();
 		long userId = 0;
 
@@ -75,21 +74,41 @@ public class SessionServiceImpl implements SessionService {
 
 		// 登录成功
 		// 设置登录cookie
-		String loginToken = MyUtil.createRandomCode();
-		Cookie cookie = new Cookie("loginToken", loginToken);
-		cookie.setMaxAge(60 * 60 * 24 * 30);
-		response.addCookie(cookie);
+		String token = MyUtil.createRandomCode();
+		map.put("taken", token);
 
 		// 将token:userId存入redis，并设置过期时间
 		Jedis jedis = jedisPool.getResource();
-		jedis.set(loginToken, Long.toString(userId), "NX", "EX", 60 * 60 * 24 * 30);
-		jedisPool.close();
+		jedis.set(token, Long.toString(userId), "NX", "EX", 60 * 60 * 24 * 30);
+		jedisPool.returnResource(jedis);
 		
 		//返回用户信息
 		User user = userDao.selectUserById(userId);
 		map.put("user", user);
 		return map;
 		
+	}
+
+	/*
+	 * 登出
+	 */
+	@Override
+	public Map<String, String> logout(String session) {
+		Map<String, String> map = new HashMap<>();
+		
+		//删除session
+		Jedis jedis = jedisPool.getResource();
+		long result = jedis.del(session);
+		jedisPool.returnResource(jedis);
+		
+		//判断session是否删除成功
+		if (result == 0) {
+			map.put("session-error", "不存在此会话");
+			return map;
+		} else {
+			map.put("ok", "删除会话成功");
+			return map;
+		}
 	}
 
 }

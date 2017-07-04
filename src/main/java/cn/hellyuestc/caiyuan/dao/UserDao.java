@@ -1,5 +1,7 @@
 package cn.hellyuestc.caiyuan.dao;
 
+import org.apache.ibatis.annotations.Param;
+
 import cn.hellyuestc.caiyuan.entity.User;
 
 public interface UserDao {
@@ -12,7 +14,7 @@ public interface UserDao {
 	
 	String selectActivationCodeByEmail(String email);
 	
-	void updateUser(int status);
+	void updateUser(@Param("email") String email, @Param("status") int status);
 	
 	long selectIdByPhone(String phone);
 	

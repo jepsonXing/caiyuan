@@ -14,19 +14,20 @@ import cn.hellyuestc.caiyuan.util.Response;
 import cn.hellyuestc.caiyuan.util.Status;
 
 @Controller
-@RequestMapping("/users")
 public class UserController {
 	
+	private Map<String, String> map;
 	@Autowired
 	private UserService userService;
 	
 	/*
 	 * 邮箱注册
 	 */
-	@RequestMapping(value="?type=email", method=RequestMethod.POST)
+	@RequestMapping(value="/users", params={"type=email"}, method=RequestMethod.POST)
 	@ResponseBody
-	public Response registeByEmail(String email, String password, String confrimPassword) {
-		Map<String, String> map = userService.addUserByEmail(email, password, confrimPassword);
+	public Response registeByEmail(String email, String password, String confirmPassword) {
+		Map<String, String> map = userService.addUserByEmail(email, password, confirmPassword);
+		
 		if (map.get("ok") != null) {
 			return new Response(new Status(201, "系统已向您的邮箱发送了一份邮件，验证后即可登录"));
 		} else {
@@ -35,26 +36,27 @@ public class UserController {
 	}
 	
 	/*
+	 * 激活邮箱失败
+	 */
+	@RequestMapping("/acvateEmailError")
+	@ResponseBody
+	public Response acvateEmailError() {
+		return new Response(new Status(400, "error"), map);
+	}
+	
+	/*
 	 * 激活邮箱
 	 */
-	@RequestMapping(value="/{email}/{activationCode}", method=RequestMethod.GET)
-	@ResponseBody
-	public Response activateEmail(@PathVariable String email, @PathVariable String activationCode) {
+	@RequestMapping(value="/users/{email}/{activationCode}", method=RequestMethod.GET)
+	public String activateEmail(@PathVariable String email, @PathVariable String activationCode) {
 		Map<String, String> map = userService.activateEmail(email, activationCode);
+		
 		if (map.get("ok") != null) {
-			return new Response(new Status(201, "激活邮箱成功"));
+			return "activateEmailSuccess";
 		} else {
-			return new Response(new Status(400, "error"), map);
+			this.map = map;
+			return "redirect:/acvateEmailError";
 		}
-	}
-
-	/*
-	 * 更换邮箱
-	 */
-	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
-	@ResponseBody
-	public Response changeEmail() {
-		return null;
 	}
 
 }
