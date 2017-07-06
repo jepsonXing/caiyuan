@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,7 +51,7 @@ public class SessionServiceImpl implements SessionService {
 	 * 登录
 	 */
 	@Override
-	public Map<String, Object> login(String account, String password) {
+	public Map<String, Object> login(String account, String password, HttpServletResponse response) {
 		Map<String, Object> map = new HashMap<>();
 		long userId = 0;
 
@@ -75,7 +77,10 @@ public class SessionServiceImpl implements SessionService {
 		// 登录成功
 		// 设置登录cookie
 		String token = MyUtil.createRandomCode();
-		map.put("taken", token);
+		Cookie cookie = new Cookie("token", token);
+		cookie.setPath("/");
+		cookie.setMaxAge(60 * 60 * 24 * 30);
+		response.addCookie(cookie);
 
 		// 将token:userId存入redis，并设置过期时间
 		Jedis jedis = jedisPool.getResource();
@@ -93,17 +98,39 @@ public class SessionServiceImpl implements SessionService {
 	 * 登出
 	 */
 	@Override
-	public Map<String, String> logout(String session) {
+	public Map<String, String> logout(HttpServletRequest request, HttpServletResponse response) {
 		Map<String, String> map = new HashMap<>();
+		String token = null;
 		
-		//删除session
-		Jedis jedis = jedisPool.getResource();
-		long result = jedis.del(session);
-		jedisPool.returnResource(jedis);
+		Cookie[] cookies = request.getCookies();
+		boolean flag = false;
+		
+		if (cookies ==  null) {
+			map.put("cookie-error", "cookie为空");
+			return map;
+		}
+		
+		for (Cookie cookie : cookies) {
+			if (cookie.getName().equals("token")) {
+				token = cookie.getValue();
+				// 从缓存中清除loginToken
+				Jedis jedis = jedisPool.getResource();
+				if (jedis.del(token) != 0) {
+					flag = true;
+				}
+				jedisPool.returnResource(jedis);
+				break;
+			}
+		}
+		
+		Cookie cookie = new Cookie("token", "");
+		cookie.setPath("/");
+		cookie.setMaxAge(60 * 60 * 24 * 30);
+		response.addCookie(cookie);
 		
 		//判断session是否删除成功
-		if (result == 0) {
-			map.put("session-error", "不存在此会话");
+		if (!flag) {
+			map.put("cookie-error", "无效的cookie");
 			return map;
 		} else {
 			map.put("ok", "删除会话成功");

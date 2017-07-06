@@ -1,7 +1,5 @@
 package cn.hellyuestc.caiyuan.entity;
 
-import java.util.Date;
-
 public class User {
 
 	private long id;
@@ -9,7 +7,7 @@ public class User {
 	private String password;
 	private String avatarUrl;
 	private String gender;
-	private Date birthday;
+	private String birthday;
 	private String phone;
 	private String email;
 	private String address;
@@ -20,8 +18,8 @@ public class User {
 	private int status;
 	private String activationCode;
 	private byte isExpert;
-	private Date gmtCreate;
-	private Date gmtModified;
+	private String gmtCreate;
+	private String gmtModified;
 	
 	public long getId() {
 		return id;
@@ -53,10 +51,10 @@ public class User {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
-	public Date getBirthday() {
+	public String getBirthday() {
 		return birthday;
 	}
-	public void setBirthday(Date birthday) {
+	public void setBirthday(String birthday) {
 		this.birthday = birthday;
 	}
 	public String getPhone() {
@@ -119,16 +117,16 @@ public class User {
 	public void setIsExpert(byte isExpert) {
 		this.isExpert = isExpert;
 	}
-	public Date getGmtCreate() {
+	public String getGmtCreate() {
 		return gmtCreate;
 	}
-	public void setGmtCreate(Date gmtCreate) {
+	public void setGmtCreate(String gmtCreate) {
 		this.gmtCreate = gmtCreate;
 	}
-	public Date getGmtModified() {
+	public String getGmtModified() {
 		return gmtModified;
 	}
-	public void setGmtModified(Date gmtModified) {
+	public void setGmtModified(String gmtModified) {
 		this.gmtModified = gmtModified;
 	}
 	

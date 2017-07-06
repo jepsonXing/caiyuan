@@ -2,9 +2,11 @@ package cn.hellyuestc.caiyuan.controller;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,8 +26,8 @@ public class SessionController {
 	 */
 	@RequestMapping(value="/sessions", method=RequestMethod.POST)
 	@ResponseBody
-	public Response login(String account, String password) {
-		Map<String, Object> map = sessionService.login(account, password);
+	public Response login(String account, String password, HttpServletResponse response) {
+		Map<String, Object> map = sessionService.login(account, password, response);
 		
 		if (map.get("user") != null) {
 			return new Response(new Status(201, "登录成功"), map);
@@ -37,10 +39,10 @@ public class SessionController {
 	/*
 	 * 登出
 	 */
-	@RequestMapping(value="/sessions/{session}", method=RequestMethod.DELETE)
+	@RequestMapping(value="/sessions", method=RequestMethod.DELETE)
 	@ResponseBody
-	public Response logout(@PathVariable String session) {
-		Map<String, String> map = sessionService.logout(session);
+	public Response logout(HttpServletRequest request, HttpServletResponse response) {
+		Map<String, String> map = sessionService.logout(request, response);
 		
 		if (map.get("ok") != null) {
 			return new Response(new Status(204, "登出成功"));

@@ -1,6 +1,5 @@
 package cn.hellyuestc.caiyuan.service.impl;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -66,12 +65,9 @@ public class UserServiceImpl implements UserService {
 		User user = new User();
 		user.setName(email);
 		user.setPassword(MyUtil.bcrypt(password));
-		user.setAvatarUrl(MyConstant.QINIU_IMAGE_URL + "user_avatar/default.png");
-		user.setBirthday(new Date());
+		user.setAvatarUrl(MyConstant.QINIU_IMAGE_URL + "user_avatar_default.png");
 		user.setEmail(email);
 		user.setActivationCode(MyUtil.createRandomCode());
-		user.setGmtCreate(new Date());
-		user.setGmtModified(new Date());
 		
 		try {
 			EmailSender.sendActivationLink(user.getActivationCode(), user.getEmail());
@@ -115,6 +111,14 @@ public class UserServiceImpl implements UserService {
 		userDao.updateUser(email, 1);
 		map.put("ok", "激活成功");
 		return map;
+	}
+
+	/*
+	 * 更换用户头像
+	 */
+	@Override
+	public void updateAvatarUrl(long id, String avatarUrl) {
+		userDao.updateAvatarUrl(id, avatarUrl);
 	}
 	
 }

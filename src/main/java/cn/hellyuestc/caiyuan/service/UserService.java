@@ -2,6 +2,10 @@ package cn.hellyuestc.caiyuan.service;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.web.multipart.MultipartFile;
+
 public interface UserService {
 	
 	/*
@@ -14,4 +18,8 @@ public interface UserService {
 	 */
 	public Map<String, String> activateEmail(String email, String activationCode);
 	
+	/*
+	 * 更换用户头像
+	 */
+	public void updateAvatarUrl(long id, String avatarUrl);
 }

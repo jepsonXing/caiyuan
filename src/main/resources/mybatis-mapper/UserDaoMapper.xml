@@ -11,7 +11,7 @@
 
 	<insert id="insertUser">
 		insert into user(name, password, avatar_url, birthday, email, activation_code, gmt_create, gmt_modified)
-		values(#{name}, #{password}, #{avatarUrl}, #{birthday}, #{email}, #{activationCode}, #{gmtCreate}, #{gmtModified})
+		values(#{name}, #{password}, #{avatarUrl}, CURDATE(), #{email}, #{activationCode}, NOW(), NOW())
 	</insert>
 
 	<select id="selectStatusByEmail" resultType="int">
@@ -22,7 +22,7 @@
 		select activation_code from user where email = #{email}
 	</select>
 	
-	<update id="updateUser">
+	<update id="updateUserByStatus">
 		update user set status = #{status} where email=#{email}
 	</update>
 	
@@ -43,10 +43,14 @@
 	</select>
 	
 	<select id="selectUserById" resultType="User">
-		select id, name, avatar_url, gender, birthday, phone, email, address,
-			job, introduction, following_count, follower_count, is_expert, gmt_create
+		select id, name, avatar_url, gender, date_format(birthday,'%Y-%m-%d') as birthday, phone, email, address,
+			job, introduction, following_count, follower_count, is_expert, date_format(gmt_create,'%Y-%m-%d %H:%i:%s') as gmt_create
 		from user
 		where id=#{id}
 	</select>
+	
+	<update id="updateAvatarUrl">
+		update user set avatar_url=#{avatar_url} where id=#{id}
+	</update>
 	
 </mapper>

@@ -21,4 +21,9 @@
 	<!-- SpringMVC不处理静态资源请求 -->
 	<mvc:default-servlet-handler />
 
+	<!--文件上传解析器 -->
+    <bean id="multipartResolver"
+        class="org.springframework.web.multipart.support.StandardServletMultipartResolver">
+    </bean>
+
 </beans>

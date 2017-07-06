@@ -26,4 +26,6 @@ public interface UserDao {
 	
 	User selectUserById(long id);
 	
+	void updateAvatarUrl(@Param("id") long id, @Param("avatar_url") String avatarUrl);
+	
 }

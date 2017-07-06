@@ -1,4 +1,4 @@
-package cn.hellyuestc.caiyuan.dao;
+package cn.hellyuestc.caiyuan.service;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -6,18 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import cn.hellyuestc.caiyuan.util.MyUtil;
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:spring-applicationContext.xml", "classpath:mybatis-configuration.xml"})
-public class UserDaoTest {
+public class CommonServiceTest {
 	
 	@Autowired
-	private UserDao userDao;
+	private CommonService commonService;
 	
 	@Test
 	public void test() {
-		userDao.updateAvatarUrl(1, "http://os3s19y8b.bkt.clouddn.com/user_avatar_default.png");
+		
 	}
 
 }
