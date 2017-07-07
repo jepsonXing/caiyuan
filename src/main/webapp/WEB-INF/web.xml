@@ -33,14 +33,11 @@
 			<param-value>classpath:springmvc-dispatcher-servlet.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
-		<!-- 文件上传配置 -->
-        <multipart-config>
+		<multipart-config>
         	<!--上传单个文件的最大限制1MB -->
             <max-file-size>1048576</max-file-size>
             <!--请求的最大限制20MB，一次上传多个文件时一共的大小 -->
             <max-request-size>20971520</max-request-size>
-            <!--当文件的大小超过临界值时将写入磁盘 -->
-            <file-size-threshold>0</file-size-threshold>
         </multipart-config>
 	</servlet>
 	<servlet-mapping>

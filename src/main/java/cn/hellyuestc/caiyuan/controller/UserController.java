@@ -1,6 +1,5 @@
 package cn.hellyuestc.caiyuan.controller;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +17,6 @@ import cn.hellyuestc.caiyuan.service.CommonService;
 import cn.hellyuestc.caiyuan.service.UserService;
 import cn.hellyuestc.caiyuan.util.MyConstant;
 import cn.hellyuestc.caiyuan.util.MyUtil;
-import cn.hellyuestc.caiyuan.util.QiniuUtil;
 import cn.hellyuestc.caiyuan.util.Response;
 import cn.hellyuestc.caiyuan.util.Status;
 
@@ -91,31 +89,25 @@ public class UserController {
 		// 请求的id与userId不相对应
 		if (id != userId) {
 			map.clear();
-			map.put("id-error", "请求的id不是登陆用户的id");
+			map.put("id-error", "请求的id与登录用户id不一致");
 			return new Response(new Status(400, "error"), map);
 		}
 
 		if (!MyUtil.isLegalImage(userAvatarImage)) {
 			map.clear();
-			map.put("file-error", "请上传后缀为.bmp、.jpg、.jpeg、.png、.gif的图片");
+			map.put("image-error", "请上传后缀为.bmp、.jpg、.jpeg、.png、.gif的图片");
 			return new Response(new Status(400, "error"), map);
 		}
 
 		// 包含原始文件名的字符串
-		String originalFilename = userAvatarImage.getOriginalFilename();
+		String originalImageName = userAvatarImage.getOriginalFilename();
 		// 提取文件拓展名
-		String fileNameExtension = originalFilename.substring(originalFilename.indexOf("."), originalFilename.length());
-		// 生成云端的真实文件名
-		String remoteFileName = "user_avatar_" + id + fileNameExtension;
-//		try {
-//			QiniuUtil.upload(userAvatarImage.getBytes(), remoteFileName);
-//		} catch (IOException e) {
-//			map.clear();
-//			map.put("uploadImage-error", "上传图片失败");
-//			return new Response(new Status(500, "error"), map);
-//		}
+		String imageNameExtension = originalImageName.substring(originalImageName.indexOf("."), originalImageName.length());
+		String imageName = id + imageNameExtension;
 		
-		String avatarUrl = MyConstant.QINIU_IMAGE_URL + remoteFileName;
+		commonService.putImageToLocal(userAvatarImage, request.getServletContext().getRealPath("/userAvatars"), imageName);
+		
+		String avatarUrl = imageName;
 		userService.updateAvatarUrl(userId, avatarUrl);
 		map.clear();
 		map.put("avatarUrl", avatarUrl);

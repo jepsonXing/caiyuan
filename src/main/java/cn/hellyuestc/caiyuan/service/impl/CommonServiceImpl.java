@@ -1,5 +1,7 @@
 package cn.hellyuestc.caiyuan.service.impl;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import cn.hellyuestc.caiyuan.service.CommonService;
 import redis.clients.jedis.Jedis;
@@ -27,13 +30,16 @@ public class CommonServiceImpl implements CommonService {
 		Map<String, String> map = new HashMap<>();
 		String token = null;
 		
+		System.out.println(request.getCookies().length);
+		
 		//遍历cookies查找是否存在token
 		Cookie[] cookies = request.getCookies();
 		if (cookies == null) {
 			map.put("cookie-error", "cookie为空");
+			return map;
 		}
+		
 		for (Cookie cookie : cookies) {
-			System.out.println(cookie.getName() + " " + cookie.getValue());
 			if (cookie.getName().equals("token")) {
 				token = cookie.getValue();
 				break;
@@ -58,6 +64,18 @@ public class CommonServiceImpl implements CommonService {
 		//token正确，找到对应的键值对
 		map.put("userId", userId);
 		return map;
+	}
+
+	@Override
+	public void putImageToLocal(MultipartFile image, String localPath, String LocalImageName) {
+		File localImage = new File(localPath, LocalImageName);
+		try {
+			image.transferTo(localImage);
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

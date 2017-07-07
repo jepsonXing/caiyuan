@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
 		User user = new User();
 		user.setName(email);
 		user.setPassword(MyUtil.bcrypt(password));
-		user.setAvatarUrl(MyConstant.QINIU_IMAGE_URL + "user_avatar_default.png");
+		user.setAvatarUrl("default.png");
 		user.setEmail(email);
 		user.setActivationCode(MyUtil.createRandomCode());
 		
