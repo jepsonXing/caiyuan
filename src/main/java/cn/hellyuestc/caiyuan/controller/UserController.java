@@ -32,7 +32,7 @@ public class UserController {
 	/*
 	 * 邮箱注册
 	 */
-	@RequestMapping(value = "/users", params = { "type=email" }, method = RequestMethod.POST)
+	@RequestMapping(value="/users", params={"type=email"}, method=RequestMethod.POST)
 	@ResponseBody
 	public Response registeByEmail(String email, String password, String confirmPassword) {
 		Map<String, String> map = userService.addUserByEmail(email, password, confirmPassword);
