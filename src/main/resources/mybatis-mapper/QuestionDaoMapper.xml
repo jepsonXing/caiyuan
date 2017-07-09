@@ -5,15 +5,27 @@
 
 <mapper namespace="cn.hellyuestc.caiyuan.dao.QuestionDao"> 
 
+	<insert id="insertQuestion">
+		<selectKey resultType="int" order="AFTER" keyProperty="id">
+            select last_insert_id() as id
+        </selectKey>
+		insert into question(user_id, user_name, topic_id, topic_name, title, content, gmt_create, gmt_modified)
+		values(#{userId}, #{userName}, #{topicId}, #{topicName}, #{title}, #{content}, NOW(), NOW());
+	</insert>
+	
+	<insert id="insertQuestionImageUrl">
+		insert into question_image(question_id, image_url) values(#{questionId}, #{imageUrl})
+	</insert>
+
 	<select id="listNewQuestionByGmtModified" resultType="Question">
-		select id, user_id, topic_id, title, content, scan_count, answer_count, gmt_create, gmt_modified
+		select id, user_id, user_name, topic_id, topic_name, title, content, scan_count, answer_count, gmt_create, gmt_modified
 		from question
 		where gmt_modified > #{time}
 		limit #{count}
 	</select>
 	
 	<select id="listNextQuestionByGmtModified" resultType="Question">
-		select id, user_id, topic_id, title, content, scan_count, answer_count, gmt_create, gmt_modified
+		select id, user_id, user_name, topic_id, topic_name, title, content, scan_count, answer_count, gmt_create, gmt_modified
 		from question
 		where gmt_modified &lt;= #{time}
 		order by gmt_modified desc
@@ -21,7 +33,7 @@
 	</select>
 	
 	<select id="listNewQuestionByGmtModifiedAndId" resultType="Question">
-		select id, user_id, topic_id, title, content, scan_count, answer_count, gmt_create, gmt_modified
+		select id, user_id, user_name, topic_id, topic_name, title, content, scan_count, answer_count, gmt_create, gmt_modified
 		from question
 		where gmt_modified > #{time} and
 		topic_id in (
@@ -31,7 +43,7 @@
 	</select>
 	
 	<select id="listNextQuestionByGmtModifiedAndId" resultType="Question">
-		select id, user_id, topic_id, title, content, scan_count, answer_count, gmt_create, gmt_modified
+		select id, user_id, user_name, topic_id, topic_name, title, content, scan_count, answer_count, gmt_create, gmt_modified
 		from question
 		where gmt_modified &lt;= #{time} and
 		topic_id in (

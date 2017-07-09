@@ -1,5 +1,6 @@
 package cn.hellyuestc.caiyuan.util;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -26,6 +27,16 @@ public class MyUtil {
 	 */
 	public static String createRandomCode() {
 		return new Date().getTime() + UUID.randomUUID().toString().replace("-", "");
+	}
+	
+	public static String formatDate(Date date, int type) {
+		SimpleDateFormat sdf = null;
+		if (type == 0) {
+			sdf = new SimpleDateFormat("yyyy-MM-dd");
+		} else {
+			sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		}
+		return sdf.format(date);
 	}
 	
 	/*

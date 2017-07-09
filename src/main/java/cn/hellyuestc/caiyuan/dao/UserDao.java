@@ -6,6 +6,8 @@ import cn.hellyuestc.caiyuan.entity.User;
 
 public interface UserDao {
 	
+	String selectNameById(long id);
+	
 	int selectEmailCount(String email);
 	
 	void insertUser(User user);

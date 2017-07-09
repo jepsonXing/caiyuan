@@ -1,6 +1,7 @@
 package cn.hellyuestc.caiyuan.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,12 +14,45 @@ import org.springframework.stereotype.Service;
 import cn.hellyuestc.caiyuan.dao.QuestionDao;
 import cn.hellyuestc.caiyuan.entity.Question;
 import cn.hellyuestc.caiyuan.service.QuestionService;
+import cn.hellyuestc.caiyuan.util.MyUtil;
 
 @Service
 public class QuestionServiceImpl implements QuestionService {
 
 	@Autowired
 	private QuestionDao questionDao;
+	
+	/*
+	 * 发布问题
+	 */
+	@Override
+	public Question publishQuestion(long userId, String userName, long topicId, String topicName, String title,
+			String content) {
+		Question question = new Question();
+		
+		question.setUserId(userId);
+		question.setUserName(userName);
+		question.setTopicId(topicId);
+		question.setTopicName(topicName);
+		question.setTitle(title);
+		question.setContent(content);
+		question.setGmtCreate(MyUtil.formatDate(new Date(), 1));
+		question.setGmtModified(MyUtil.formatDate(new Date(), 1));
+		
+		long questionId = questionDao.insertQuestion(question);
+		
+		question.setId(questionId);
+		
+		return question;
+	}
+	
+	/*
+	 * 增加问题图片
+	 */
+	@Override
+	public void addQuestionImage(long questionId, String imageUrl) {
+		questionDao.insertQuestionImageUrl(questionId, imageUrl);
+	}
 	
 	/*
 	 * 检查时间和请求问题的数量是否合法

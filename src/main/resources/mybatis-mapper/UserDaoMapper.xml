@@ -5,6 +5,10 @@
 
 <mapper namespace="cn.hellyuestc.caiyuan.dao.UserDao"> 
 
+	<select id="selectNameById" resultType="String">
+		select name from user where id=#{id}
+	</select>
+
 	<select id="selectEmailCount" resultType="int">
 		select count(*) from user where email = #{email}
 	</select>

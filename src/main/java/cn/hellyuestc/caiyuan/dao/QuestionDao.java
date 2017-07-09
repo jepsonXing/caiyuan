@@ -8,12 +8,16 @@ import cn.hellyuestc.caiyuan.entity.Question;
 
 public interface QuestionDao {
 	
-	public List<Question> listNewQuestionByGmtModified(@Param("time") String time, @Param("count") int count);
-
-	public List<Question> listNextQuestionByGmtModified(@Param("time") String time, @Param("count") int count);
+	long insertQuestion(Question question);
 	
-	public List<Question> listNewQuestionByGmtModifiedAndId(@Param("id") long id, @Param("time") String time, @Param("count") int count);
+	void insertQuestionImageUrl(@Param("questionId") long questionId,@Param("imageUrl")  String imageUrl);
+	
+	List<Question> listNewQuestionByGmtModified(@Param("time") String time, @Param("count") int count);
 
-	public List<Question> listNextQuestionByGmtModifiedAndId(@Param("id") long id, @Param("time") String time, @Param("count") int count);
+	List<Question> listNextQuestionByGmtModified(@Param("time") String time, @Param("count") int count);
+	
+	List<Question> listNewQuestionByGmtModifiedAndId(@Param("id") long id, @Param("time") String time, @Param("count") int count);
+
+	List<Question> listNextQuestionByGmtModifiedAndId(@Param("id") long id, @Param("time") String time, @Param("count") int count);
 	
 }

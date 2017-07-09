@@ -5,6 +5,8 @@
 
 <mapper namespace="cn.hellyuestc.caiyuan.dao.TopicDao"> 
 	
-	
+	<select id="selectNameById" resultType="String">
+		select name from topic where id=#{id}
+	</select>
 		
 </mapper>

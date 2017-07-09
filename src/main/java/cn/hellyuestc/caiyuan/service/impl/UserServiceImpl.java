@@ -14,7 +14,6 @@ import cn.hellyuestc.caiyuan.dao.UserDao;
 import cn.hellyuestc.caiyuan.entity.User;
 import cn.hellyuestc.caiyuan.service.UserService;
 import cn.hellyuestc.caiyuan.util.EmailSender;
-import cn.hellyuestc.caiyuan.util.MyConstant;
 import cn.hellyuestc.caiyuan.util.MyUtil;
 
 @Service
@@ -24,6 +23,14 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserDao userDao;
 
+	/*
+	 * 根据id获取用户名
+	 */
+	@Override
+	public String getNameById(long id) {
+		return userDao.selectNameById(id);
+	}
+	
 	/*
 	 * 邮箱注册
 	 */
@@ -65,7 +72,7 @@ public class UserServiceImpl implements UserService {
 		User user = new User();
 		user.setName(email);
 		user.setPassword(MyUtil.bcrypt(password));
-		user.setAvatarUrl("default.png");
+		user.setAvatarUrl("userAvatars/default.png");
 		user.setEmail(email);
 		user.setActivationCode(MyUtil.createRandomCode());
 		
@@ -120,5 +127,5 @@ public class UserServiceImpl implements UserService {
 	public void updateAvatarUrl(long id, String avatarUrl) {
 		userDao.updateAvatarUrl(id, avatarUrl);
 	}
-	
+
 }

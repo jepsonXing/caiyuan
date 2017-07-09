@@ -9,6 +9,11 @@ import org.springframework.web.multipart.MultipartFile;
 public interface UserService {
 	
 	/*
+	 * 根据id获取用户名
+	 */
+	public String getNameById(long id);
+	
+	/*
 	 * 邮箱注册
 	 */
 	public Map<String, String> addUserByEmail(String email, String password, String confirmPassword);

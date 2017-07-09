@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import cn.hellyuestc.caiyuan.service.CommonService;
 import cn.hellyuestc.caiyuan.service.UserService;
-import cn.hellyuestc.caiyuan.util.MyConstant;
 import cn.hellyuestc.caiyuan.util.MyUtil;
 import cn.hellyuestc.caiyuan.util.Response;
 import cn.hellyuestc.caiyuan.util.Status;
@@ -103,9 +102,9 @@ public class UserController {
 		String originalImageName = userAvatarImage.getOriginalFilename();
 		// 提取文件拓展名
 		String imageNameExtension = originalImageName.substring(originalImageName.indexOf("."), originalImageName.length());
-		String imageName = id + imageNameExtension;
+		String imageName = "userAvatars/" + id + imageNameExtension;
 		
-		commonService.putImageToLocal(userAvatarImage, request.getServletContext().getRealPath("/userAvatars"), imageName);
+		commonService.putImageToLocal(userAvatarImage, request.getServletContext().getRealPath("/"), imageName);
 		
 		String avatarUrl = imageName;
 		userService.updateAvatarUrl(userId, avatarUrl);
