@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.hellyuestc.caiyuan.dao.AnswerCommentDao"> 
+
+	<insert id="insertAnswerComment">
+		<selectKey resultType="int" order="AFTER" keyProperty="id">
+            select last_insert_id() as id
+        </selectKey>
+        insert into answer_comment(answer_id, from_user_id, from_user_name, to_user_id, to_user_name, content, gmt_create, gmt_modified)
+        values(#{answerId}, #{fromUserId}, #{fromUserName}, #{toUserId}, #{toUserName}, #{content}, NOW(), NOW())
+	</insert>
+	
+	<select id="getAnswerComments" resultType="AnswerComment">
+		select id, answer_id, from_user_id, from_user_name, to_user_id, to_user_name, content, gmt_create, gmt_modified
+		from answer_comment
+		where answer_id=#{answerId}
+		And gmt_create &lt;= #{time}
+		order by gmt_create desc
+		limit #{count}
+	</select>
+		
+</mapper>

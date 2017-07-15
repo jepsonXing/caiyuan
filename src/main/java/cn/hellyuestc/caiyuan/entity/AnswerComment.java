@@ -1,12 +1,12 @@
 package cn.hellyuestc.caiyuan.entity;
 
-import java.util.List;
-
 public class AnswerComment {
 	private long id;
 	private long answerId;
-	private long userId;
-	private String userName;
+	private long fromUserId;
+	private String fromUserName;
+	private long toUserId;
+	private String toUserName;
 	private String content;
 	private String gmtCreate;
 	private String gmtModified;
@@ -27,20 +27,36 @@ public class AnswerComment {
 		this.answerId = answerId;
 	}
 
-	public long getUserId() {
-		return userId;
+	public long getFromUserId() {
+		return fromUserId;
 	}
 
-	public void setUserId(long userId) {
-		this.userId = userId;
+	public void setFromUserId(long fromUserId) {
+		this.fromUserId = fromUserId;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getFromUserName() {
+		return fromUserName;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setFromUserName(String fromUserName) {
+		this.fromUserName = fromUserName;
+	}
+
+	public long getToUserId() {
+		return toUserId;
+	}
+
+	public void setToUserId(long toUserId) {
+		this.toUserId = toUserId;
+	}
+
+	public String getToUserName() {
+		return toUserName;
+	}
+
+	public void setToUserName(String toUserName) {
+		this.toUserName = toUserName;
 	}
 
 	public String getContent() {

@@ -5,12 +5,16 @@
 
 <mapper namespace="cn.hellyuestc.caiyuan.dao.AnswerDao"> 
 
+	<select id="selectCountById" resultType="int">
+		select count(*) from answer where id=#{id}
+	</select>
+
 	<insert id="insertAnswer">
 		<selectKey resultType="int" order="AFTER" keyProperty="id">
             select last_insert_id() as id
         </selectKey>
         insert into answer(question_id, user_id, user_name, summary, content, like_count, unlike_count, gmt_create, gmt_modified)
-        values(#{questionId}, #{userId}, #{userName}, #{summary}, #{content}, #{likeCount}, #{unlikeCount}, #{gmtCreate}, #{gmtModified})
+        values(#{questionId}, #{userId}, #{userName}, #{summary}, #{content}, #{likeCount}, #{unlikeCount}, now(), now())
 	</insert>
 
 	<select id="listNewAnswerByGmtModified" resultType="Answer">

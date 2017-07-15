@@ -8,6 +8,8 @@ import cn.hellyuestc.caiyuan.entity.Answer;
 
 public interface AnswerDao {
 	
+	int selectCountById(long id);
+	
 	long insertAnswer(Answer answer);
 
 	List<Answer> listNewAnswerByGmtModified(@Param("questionsId") long questionId, @Param("time") String time, @Param("count") int count);
