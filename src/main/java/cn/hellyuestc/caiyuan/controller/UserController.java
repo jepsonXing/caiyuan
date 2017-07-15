@@ -73,7 +73,7 @@ public class UserController {
 	@RequestMapping(value = "/users/{id}", params = { "field=avatarUrl" })
 	@ResponseBody
 	public Response updateAvatarUrl(@PathVariable long id, MultipartFile userAvatarImage, HttpServletRequest request) {
-		Map<String, String> map = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		long userId = 0;
 
 		map = commonService.getUserIdFromRedis(request);
@@ -83,7 +83,7 @@ public class UserController {
 			return new Response(new Status(400, "error"), map);
 		}
 
-		userId = Long.parseLong(map.get("userId"));
+		userId = (long) map.get("userId");
 
 		// 请求的id与userId不相对应
 		if (id != userId) {

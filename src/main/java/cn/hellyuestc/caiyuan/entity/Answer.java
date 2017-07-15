@@ -1,18 +1,14 @@
 package cn.hellyuestc.caiyuan.entity;
 
-import java.util.List;
-
-public class Question {
-
+public class Answer {
 	private long id;
+	private long questionId;
 	private long userId;
 	private String userName;
-	private long topicId;
-	private String topicName;
-	private String title;
+	private String summary;
 	private String content;
-	private int scanCount;
-	private int answerCount;
+	private int likeCount;
+	private int unlikeCount;
 	private String gmtCreate;
 	private String gmtModified;
 
@@ -22,6 +18,14 @@ public class Question {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public long getQuestionId() {
+		return questionId;
+	}
+
+	public void setQuestionId(long questionId) {
+		this.questionId = questionId;
 	}
 
 	public long getUserId() {
@@ -40,28 +44,12 @@ public class Question {
 		this.userName = userName;
 	}
 
-	public long getTopicId() {
-		return topicId;
+	public String getSummary() {
+		return summary;
 	}
 
-	public void setTopicId(long topicId) {
-		this.topicId = topicId;
-	}
-
-	public String getTopicName() {
-		return topicName;
-	}
-
-	public void setTopicName(String topicName) {
-		this.topicName = topicName;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
+	public void setSummary(String summary) {
+		this.summary = summary;
 	}
 
 	public String getContent() {
@@ -72,20 +60,20 @@ public class Question {
 		this.content = content;
 	}
 
-	public int getScanCount() {
-		return scanCount;
+	public int getLikeCount() {
+		return likeCount;
 	}
 
-	public void setScanCount(int scanCount) {
-		this.scanCount = scanCount;
+	public void setLikeCount(int likeCount) {
+		this.likeCount = likeCount;
 	}
 
-	public int getAnswerCount() {
-		return answerCount;
+	public int getUnlikeCount() {
+		return unlikeCount;
 	}
 
-	public void setAnswerCount(int answerCount) {
-		this.answerCount = answerCount;
+	public void setUnlikeCount(int unlikeCount) {
+		this.unlikeCount = unlikeCount;
 	}
 
 	public String getGmtCreate() {

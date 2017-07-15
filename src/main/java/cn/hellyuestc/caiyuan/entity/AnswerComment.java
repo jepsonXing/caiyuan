@@ -2,17 +2,12 @@ package cn.hellyuestc.caiyuan.entity;
 
 import java.util.List;
 
-public class Question {
-
+public class AnswerComment {
 	private long id;
+	private long answerId;
 	private long userId;
 	private String userName;
-	private long topicId;
-	private String topicName;
-	private String title;
 	private String content;
-	private int scanCount;
-	private int answerCount;
 	private String gmtCreate;
 	private String gmtModified;
 
@@ -22,6 +17,14 @@ public class Question {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public long getAnswerId() {
+		return answerId;
+	}
+
+	public void setAnswerId(long answerId) {
+		this.answerId = answerId;
 	}
 
 	public long getUserId() {
@@ -40,52 +43,12 @@ public class Question {
 		this.userName = userName;
 	}
 
-	public long getTopicId() {
-		return topicId;
-	}
-
-	public void setTopicId(long topicId) {
-		this.topicId = topicId;
-	}
-
-	public String getTopicName() {
-		return topicName;
-	}
-
-	public void setTopicName(String topicName) {
-		this.topicName = topicName;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
 	public String getContent() {
 		return content;
 	}
 
 	public void setContent(String content) {
 		this.content = content;
-	}
-
-	public int getScanCount() {
-		return scanCount;
-	}
-
-	public void setScanCount(int scanCount) {
-		this.scanCount = scanCount;
-	}
-
-	public int getAnswerCount() {
-		return answerCount;
-	}
-
-	public void setAnswerCount(int answerCount) {
-		this.answerCount = answerCount;
 	}
 
 	public String getGmtCreate() {

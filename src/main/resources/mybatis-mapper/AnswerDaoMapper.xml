@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.hellyuestc.caiyuan.dao.AnswerDao"> 
+
+	<insert id="insertAnswer">
+		<selectKey resultType="int" order="AFTER" keyProperty="id">
+            select last_insert_id() as id
+        </selectKey>
+        insert into answer(question_id, user_id, user_name, summary, content, like_count, unlike_count, gmt_create, gmt_modified)
+        values(#{questionId}, #{userId}, #{userName}, #{summary}, #{content}, #{likeCount}, #{unlikeCount}, #{gmtCreate}, #{gmtModified})
+	</insert>
+
+	<select id="listNewAnswerByGmtModified" resultType="Answer">
+		select id, question_id, user_id, user_name, summary, like_count, unlike_count, gmt_create, gmt_modified
+		from answer
+		where gmt_modified > #{time}
+		and question_id = #{questionId}
+		limit #{count}
+	</select>
+	
+	<select id="listNextAnswerByGmtModified" resultType="Answer">
+		select id, question_id, user_id, user_name, summary, like_count, unlike_count, gmt_create, gmt_modified
+		from answer
+		where gmt_modified &lt;= #{time}
+		order by gmt_modified desc
+		limit #{count}
+	</select>
+		
+</mapper>

@@ -8,6 +8,8 @@ import cn.hellyuestc.caiyuan.entity.Question;
 
 public interface QuestionDao {
 	
+	int selectCountById(long id);
+	
 	long insertQuestion(Question question);
 	
 	void insertQuestionImageUrl(@Param("questionId") long questionId,@Param("imageUrl")  String imageUrl);

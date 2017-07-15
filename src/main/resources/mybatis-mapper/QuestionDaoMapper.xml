@@ -5,6 +5,10 @@
 
 <mapper namespace="cn.hellyuestc.caiyuan.dao.QuestionDao"> 
 
+	<select id="selectCountById" resultType="int">
+		select count(*) from question where id=#{id}
+	</select>
+
 	<insert id="insertQuestion">
 		<selectKey resultType="int" order="AFTER" keyProperty="id">
             select last_insert_id() as id

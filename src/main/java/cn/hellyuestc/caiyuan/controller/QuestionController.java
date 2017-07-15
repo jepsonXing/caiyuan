@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,58 +42,57 @@ public class QuestionController {
 	@RequestMapping(value="/questions", method=RequestMethod.POST)
 	@ResponseBody
 	public Response addQuestion(long userId, long topicId, String title, String content, HttpServletRequest request) {
-		Map<String, String> stringMap = new HashMap<>();
-		Map<String, Object> objectMap = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		String userName = null;
 		String topicName = null;
 		
-		stringMap = commonService.getUserIdFromRedis(request);
+		map = commonService.getUserIdFromRedis(request);
 		
 		// 未登录
-		if (stringMap.get("userId") == null) {
-			return new Response(new Status(400, "error"), stringMap);
+		if (map.get("userId") == null) {
+			return new Response(new Status(400, "error"), map);
 		}
 
-		long id = Long.parseLong((String) stringMap.get("userId"));
+		long id = (long) map.get("userId");
 		
 		if (id != userId) {
-			stringMap.clear();
-			stringMap.put("id-error", "请求的id与登陆的用户id不一致");
-			return new Response(new Status(400, "error"), stringMap);
+			map.clear();
+			map.put("id-error", "请求的id与登陆的用户id不一致");
+			return new Response(new Status(400, "error"), map);
 		}
 		
 		userName = userService.getNameById(userId);
 		// userId不存在
 		if (userName == null) {
-			stringMap.put("userId-error", "用户id不存在");
-			return new Response(new Status(400, "error"), stringMap);
+			map.put("userId-error", "用户id不存在");
+			return new Response(new Status(400, "error"), map);
 		}
 		
 		topicName = topicService.getNameById(topicId);
 		// topicId不存在
 		if (topicName == null) {
-			stringMap.put("topicId-error", "话题id不存在");
-			return new Response(new Status(400, "error"), stringMap);
+			map.put("topicId-error", "话题id不存在");
+			return new Response(new Status(400, "error"), map);
 		}
 		
 		// title长度不合法
 		if ((title == null) || (title.equals("")) || (100 < title.length())) {
-			stringMap.put("title-error", "请输入1-100个字符的标题");
-			return new Response(new Status(400, "error"), stringMap);
+			map.put("title-error", "请输入1-100个字符的标题");
+			return new Response(new Status(400, "error"), map);
 		}
 		
 		// content长度超出范围
 		if ((content == null) || (content.equals("")) || (65535 < content.length())) {
-			stringMap.put("title-error", "请输入1-65535个字符的内容");
-			return new Response(new Status(400, "error"), stringMap);
+			map.put("title-error", "请输入1-65535个字符的内容");
+			return new Response(new Status(400, "error"), map);
 		}
 		
 		// 发布问题成功
 		Question question = questionService.publishQuestion(userId, userName, topicId, topicName, title, content);
 		
-		objectMap.put("question", question);
+		map.put("question", question);
 		
-		return new Response(new Status(201, "发布问题成功"), objectMap);
+		return new Response(new Status(201, "发布问题成功"), map);
 	}
 	
 	/*
@@ -101,7 +101,7 @@ public class QuestionController {
 	@RequestMapping(value="/questions/{id}/images", method=RequestMethod.POST)
 	@ResponseBody
 	public Response uploadQuestionImage(@PathVariable long id, MultipartFile questionImage, HttpServletRequest request) {
-		Map<String, String> map = new HashMap<>();
+		Map<String, Object> map = new HashMap<>();
 		long userId = 0;
 
 		map = commonService.getUserIdFromRedis(request);
@@ -111,7 +111,7 @@ public class QuestionController {
 			return new Response(new Status(400, "error"), map);
 		}
 		
-		userId = Long.parseLong(map.get("userId"));
+		userId = (long) map.get("userId");
 		
 		if (!MyUtil.isLegalImage(questionImage)) {
 			map.clear();
@@ -140,60 +140,60 @@ public class QuestionController {
 	/*
 	 * 获取问题（按时间排序）
 	 */
-	@RequestMapping(value="/questions", params={"offset={time}", "limit={count}", "type=new"}, method=RequestMethod.GET)
+	@RequestMapping(value="/questions", params={"offset", "limit", "type=new"}, method=RequestMethod.GET)
 	@ResponseBody
-	public Response getNewQuestionsByTime(@PathVariable String time, @PathVariable int count, HttpServletRequest request) {
-		Map<String, String> stringMap = new HashMap<>();
-		Map<String, Object> objectMap = new HashMap<>();
+	public Response getNewQuestionsByTime(@RequestParam("offset") String time, @RequestParam("limit") int count, HttpServletRequest request) {
+		Map<String, Object> map = new HashMap<>();
  		long userId = 0;
  		
  		//检查时间和请求的问题数量是否合法
- 		stringMap = questionService.validateTimeAndCount(time, count);
- 		if (stringMap.get("ok") == null) {
- 			return new Response(new Status(400, "error"), stringMap);
+ 		map = commonService.validateTimeAndCount(time, count);
+ 		if (map.get("ok") == null) {
+ 			return new Response(new Status(400, "error"), map);
  		}
 
- 		stringMap = commonService.getUserIdFromRedis(request);
-		
+ 		map = commonService.getUserIdFromRedis(request);
+ 		
 		// 未登录
-		if (stringMap.get("userId") == null) {
+		if (map.get("userId") == null) {
 			// 游客，返回所有话题中的问题
-			objectMap = questionService.getQuestions(time, count, "new");
+			map = questionService.getQuestions(time, count, "new");
+			return new Response(new Status(200, "ok"), map);
 		}
 
-		userId = Long.parseLong((String) stringMap.get("userId"));
+		userId = Long.parseLong((String) map.get("userId"));
 		
-		objectMap = questionService.getQuestions(userId, time, count, "new");
+		map = questionService.getQuestions(userId, time, count, "new");
 		
-		return new Response(new Status(200, "ok"), objectMap);
+		return new Response(new Status(200, "ok"), map);
 	}
 	
-	@RequestMapping(value="/questions", params={"offset={time}", "limit={count}", "type=next"}, method=RequestMethod.GET)
-	@ResponseBody
-	public Response getNextQuestionsByTime(@PathVariable String time, @PathVariable int count, HttpServletRequest request) {
-		Map<String, String> stringMap = new HashMap<>();
-		Map<String, Object> objectMap = new HashMap<>();
- 		long userId = 0;
- 		
- 		//检查时间和请求的问题数量是否合法
- 		stringMap = questionService.validateTimeAndCount(time, count);
- 		if (stringMap.get("ok") == null) {
- 			return new Response(new Status(400, "error"), stringMap);
- 		}
-
- 		stringMap = commonService.getUserIdFromRedis(request);
-		
-		// 未登录
-		if (stringMap.get("userId") == null) {
-			// 游客，返回所有话题中的问题
-			objectMap = questionService.getQuestions(time, count, "next");
-		}
-
-		userId = Long.parseLong((String) stringMap.get("userId"));
-		
-		objectMap = questionService.getQuestions(userId, time, count, "next");
-		
-		return new Response(new Status(200, "ok"), objectMap);
-	}
+//	@RequestMapping(value="/questions", params={"offset={time}", "limit={count}", "type=next"}, method=RequestMethod.GET)
+//	@ResponseBody
+//	public Response getNextQuestionsByTime(@PathVariable String time, @PathVariable int count, HttpServletRequest request) {
+//		Map<String, String> stringMap = new HashMap<>();
+//		Map<String, Object> objectMap = new HashMap<>();
+// 		long userId = 0;
+// 		
+// 		//检查时间和请求的问题数量是否合法
+// 		stringMap = questionService.validateTimeAndCount(time, count);
+// 		if (stringMap.get("ok") == null) {
+// 			return new Response(new Status(400, "error"), stringMap);
+// 		}
+//
+// 		stringMap = commonService.getUserIdFromRedis(request);
+//		
+//		// 未登录
+//		if (stringMap.get("userId") == null) {
+//			// 游客，返回所有话题中的问题
+//			objectMap = questionService.getQuestions(time, count, "next");
+//		}
+//
+//		userId = Long.parseLong((String) stringMap.get("userId"));
+//		
+//		objectMap = questionService.getQuestions(userId, time, count, "next");
+//		
+//		return new Response(new Status(200, "ok"), objectMap);
+//	}
 
 }
