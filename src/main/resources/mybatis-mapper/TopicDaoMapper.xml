@@ -8,5 +8,9 @@
 	<select id="selectNameById" resultType="String">
 		select name from topic where id=#{id}
 	</select>
+	
+	<update id="updateQuestionCount">
+		update topic set question_count = question_count + 1 where id = #{id}
+	</update>
 		
 </mapper>

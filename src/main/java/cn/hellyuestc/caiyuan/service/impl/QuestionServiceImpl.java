@@ -10,8 +10,10 @@ import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import cn.hellyuestc.caiyuan.dao.QuestionDao;
+import cn.hellyuestc.caiyuan.dao.TopicDao;
 import cn.hellyuestc.caiyuan.entity.Question;
 import cn.hellyuestc.caiyuan.service.QuestionService;
 import cn.hellyuestc.caiyuan.util.MyUtil;
@@ -21,10 +23,13 @@ public class QuestionServiceImpl implements QuestionService {
 
 	@Autowired
 	private QuestionDao questionDao;
+	@Autowired
+	private TopicDao topicDao;
 	
 	/*
 	 * 发布问题
 	 */
+	@Transactional
 	@Override
 	public Question publishQuestion(long userId, String userName, long topicId, String topicName, String title,
 			String content) {
@@ -36,11 +41,12 @@ public class QuestionServiceImpl implements QuestionService {
 		question.setTopicName(topicName);
 		question.setTitle(title);
 		question.setContent(content);
+		question.setIsPublish((byte) 1); 
 		question.setGmtCreate(MyUtil.formatDate(new Date(), 1));
 		question.setGmtModified(MyUtil.formatDate(new Date(), 1));
 		
+		topicDao.updateQuestionCount(topicId);
 		long questionId = questionDao.insertQuestion(question);
-		
 		question.setId(questionId);
 		
 		return question;

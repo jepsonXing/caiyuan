@@ -160,6 +160,22 @@
 			<artifactId>thumbnailator</artifactId>
 			<version>0.4.8</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>taobao-sdk-java-auto_1455552377940-20160607</groupId>
+			<artifactId>taobao-sdk-java-auto_1455552377940-20160607</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/taobao-sdk-java-auto_1455552377940-20160607.jar</systemPath>
+		</dependency>
+		
+		<dependency>
+			<groupId>taobao-sdk-java-auto_1455552377940-20160607-source</groupId>
+			<artifactId>taobao-sdk-java-auto_1455552377940-20160607-source</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/taobao-sdk-java-auto_1455552377940-20160607-source.jar</systemPath>
+		</dependency>
 
 	</dependencies>
 

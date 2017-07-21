@@ -10,6 +10,8 @@ public interface UserDao {
 	
 	int selectEmailCount(String email);
 	
+	int selectPhoneCount(String phone);
+	
 	void insertUser(User user);
 	
 	long insertUserTypePhone(User user);

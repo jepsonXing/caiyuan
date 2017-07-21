@@ -2,9 +2,7 @@ package cn.hellyuestc.caiyuan.service;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.web.multipart.MultipartFile;
+import javax.servlet.http.HttpServletResponse;
 
 public interface UserService {
 	
@@ -16,7 +14,7 @@ public interface UserService {
 	/*
 	 * 手机注册
 	 */
-	Map<String, Object> addUserByPhone(String phone, String verificationCode, String password, String confirmPassword);
+	Map<String, Object> addUserByPhone(String phone, String verificationCode, String password, String confirmPassword, HttpServletResponse response);
 	
 	/*
 	 * 邮箱注册

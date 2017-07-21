@@ -7,6 +7,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,10 +42,18 @@ public class UserServiceImpl implements UserService {
 	 * 手机注册
 	 */
 	@Override
-	public Map<String, Object> addUserByPhone(String phone, String verificationCode, String password, String confirmPassword) {
+	public Map<String, Object> addUserByPhone(String phone, String verificationCode, String password, String confirmPassword, HttpServletResponse response) {
 		Map<String, Object> map = new HashMap<>();
 		Pattern pattern = null;
 		Matcher matcher = null;
+		
+		// 手机号格式不正确
+		pattern = Pattern.compile("^(13[0-9]|14[579]|15[0-3,5-9]|17[0135678]|18[0-9])\\d{8}$");
+		matcher = pattern.matcher(phone);
+		if (!matcher.matches()) {
+			map.put("error", "手机号格式错误");
+			return map;
+		}
 		
 		// 密码格式错误，请输入6-20个字符
 		pattern = Pattern.compile("^\\w{6,20}$");
@@ -74,13 +84,19 @@ public class UserServiceImpl implements UserService {
 			return map;
 		}
 		
-		jedis.del(verificationCode);
-		jedisPool.returnResource(jedis);
+		// 手机号已注册
+		if (userDao.selectPhoneCount(phone) != 0) {
+			map.put("error", "手机号已注册");
+			return map;
+		}
 		
 		// 注册成功
+		jedis.del(verificationCode);
+		
 		User user = new User();
 		Date date = new Date();
 		user.setName(phone);
+		user.setPassword(MyUtil.bcrypt(password));
 		user.setAvatarUrl("userAvatars/default.png");
 		user.setGender("男");
 		user.setBirthday(MyUtil.formatDate(date, 0));
@@ -98,7 +114,19 @@ public class UserServiceImpl implements UserService {
 		
 		long id = userDao.insertUserTypePhone(user);
 		
+		// 设置登录cookie
+		String token = MyUtil.createRandomCode();
+		Cookie cookie = new Cookie("token", token);
+		cookie.setPath("/");
+		cookie.setMaxAge(60 * 60 * 24 * 30);
+		response.addCookie(cookie);
+
+		// 将token:userId存入redis，并设置过期时间
+		jedis.set(token, Long.toString(id), "NX", "EX", 60 * 60 * 24 * 30);
+		jedisPool.returnResource(jedis);
+		
 		user.setId(id);
+		user.setPassword(null);
 		map.put("user", user);
 		return map;
 	}
@@ -116,7 +144,7 @@ public class UserServiceImpl implements UserService {
 		pattern = Pattern.compile("^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\\.[a-zA-Z0-9_-]{2,3}){1,2})$");
 		matcher = pattern.matcher(email);
 		if (!matcher.matches()) {
-			map.put("email-error", "邮箱格式错误");
+			map.put("error", "邮箱格式错误");
 			return map;
 		}
 		
@@ -124,19 +152,19 @@ public class UserServiceImpl implements UserService {
 		pattern = Pattern.compile("^\\w{6,20}$");
 		matcher = pattern.matcher(password);
 		if (!matcher.matches()) {
-			map.put("password-error", "密码格式错误，请输入1-20个字符的密码");
+			map.put("error", "密码格式错误，请输入1-20个字符的密码");
 			return map;
 		}
 		
 		// 密码不一致
 		if (!password.equals(confirmPassword)) {
-			map.put("confrimPassword-error", "密码不一致");
+			map.put("error", "密码不一致");
 			return map;
 		}
 		
 		// 邮箱已被注册
 		if (userDao.selectEmailCount(email) > 0) {
-			map.put("email-error", "邮箱已注册");
+			map.put("error", "邮箱已注册");
 			return map;
 		}
 		
@@ -169,19 +197,19 @@ public class UserServiceImpl implements UserService {
 		
 		//邮箱未注册
 		if (userDao.selectEmailCount(email) == 0) {
-			map.put("email-error", "邮箱未注册");
+			map.put("error", "邮箱未注册");
 			return map;
 		}
 		
 		//邮箱已激活
 		if (userDao.selectStatusByEmail(email) == 1) {
-			map.put("activate-errot", "邮箱已激活");
+			map.put("error", "邮箱已激活");
 			return map;
 		}
 		
 		//激活码不正确
 		if (!userDao.selectActivationCodeByEmail(email).equals(activationCode)) {
-			map.put("activationCode-error", "激活码不正确");
+			map.put("error", "激活码不正确");
 			System.out.println();
 			return map;
 		}
@@ -208,6 +236,14 @@ public class UserServiceImpl implements UserService {
 		Map<String, Object> map = new HashMap<>();
 		Pattern pattern = null;
 		Matcher matcher = null;
+		
+		// 手机号格式不正确
+		pattern = Pattern.compile("^(13[0-9]|14[579]|15[0-3,5-9]|17[0135678]|18[0-9])\\d{8}$");
+		matcher = pattern.matcher(phone);
+		if (!matcher.matches()) {
+			map.put("error", "手机号格式错误");
+			return map;
+		}
 		
 		// 密码格式错误，请输入6-20个字符
 		pattern = Pattern.compile("^\\w{6,20}$");

@@ -12,6 +12,10 @@
 	<select id="selectEmailCount" resultType="int">
 		select count(*) from user where email = #{email}
 	</select>
+	
+	<select id="selectPhoneCount" resultType="int">
+		select count(*) from user where phone = #{phone}
+	</select>
 
 	<insert id="insertUser">
 		insert into user(name, password, avatar_url, birthday, email, activation_code, gmt_create, gmt_modified)

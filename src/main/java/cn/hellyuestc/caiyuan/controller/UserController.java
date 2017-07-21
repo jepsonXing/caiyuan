@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,8 +46,8 @@ public class UserController {
 	 * 手机注册
 	 */
 	@RequestMapping(value="/users", params={"type=phone"}, method=RequestMethod.POST)
-	public @ResponseBody Response  registeByPhone(String phone, String verificationCode, String password, String confirmPassword) {
-		Map<String, Object> map = userService.addUserByPhone(phone, verificationCode, password, confirmPassword);
+	public @ResponseBody Response  registeByPhone(String phone, String verificationCode, String password, String confirmPassword, HttpServletResponse response) {
+		Map<String, Object> map = userService.addUserByPhone(phone, verificationCode, password, confirmPassword, response);
 		if (map.get("error") != null) {
 			return new Response(new Status(400, "error"), map);
 		} else {
@@ -142,13 +143,13 @@ public class UserController {
 	/*
 	 * 手机验证重置密码
 	 */
-	@RequestMapping(value="/resetPassword", params = { "type=phone" })
+	@RequestMapping(value="/resetpassword", params = { "type=phone" })
 	public @ResponseBody Response resetPasswordByPhone(String phone, String verificationCode, String password, String confirmPassword) {
 		Map<String, Object> map = userService.resetPasswordByPhone(phone, verificationCode, password, confirmPassword);
 		if (map.get("error") != null) {
 			return new Response(new Status(400, "error"), map);
 		} else {
-			return new Response(new Status(201, "重置密码成功"), map);
+			return new Response(new Status(201, "重置密码成功"));
 		}
 	}
 
