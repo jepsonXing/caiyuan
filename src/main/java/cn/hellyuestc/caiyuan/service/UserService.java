@@ -11,20 +11,31 @@ public interface UserService {
 	/*
 	 * 根据id获取用户名
 	 */
-	public String getNameById(long id);
+	String getNameById(long id);
+	
+	/*
+	 * 手机注册
+	 */
+	Map<String, Object> addUserByPhone(String phone, String verificationCode, String password, String confirmPassword);
 	
 	/*
 	 * 邮箱注册
 	 */
-	public Map<String, String> addUserByEmail(String email, String password, String confirmPassword);
+	Map<String, String> addUserByEmail(String email, String password, String confirmPassword);
 
 	/*
 	 * 激活邮箱
 	 */
-	public Map<String, String> activateEmail(String email, String activationCode);
+	Map<String, String> activateEmail(String email, String activationCode);
 	
 	/*
 	 * 更换用户头像
 	 */
-	public void updateAvatarUrl(long id, String avatarUrl);
+	void updateAvatarUrl(long id, String avatarUrl);
+	
+	/*
+	 * 手机验证重置密码
+	 */
+	Map<String, Object> resetPasswordByPhone(String phone, String verificationCode, String password, String confirmPassword);
+	
 }

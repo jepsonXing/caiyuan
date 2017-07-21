@@ -29,6 +29,32 @@ public class UserController {
 	private CommonService commonService;
 
 	/*
+	 * 获取手机验证码
+	 */
+	@RequestMapping(value="/verificationcodes", params={"phone"}, method=RequestMethod.GET)
+	public @ResponseBody Response getVerificationCode(String phone) {
+		Map<String, Object> map = commonService.getVerificationCode(phone);
+		if (map.get("ok") != null) {
+			return new Response(new Status(200, "验证码已发送"));
+		} else {
+			return new Response(new Status(400, "error"), map);
+		}
+	}
+	
+	/*
+	 * 手机注册
+	 */
+	@RequestMapping(value="/users", params={"type=phone"}, method=RequestMethod.POST)
+	public @ResponseBody Response  registeByPhone(String phone, String verificationCode, String password, String confirmPassword) {
+		Map<String, Object> map = userService.addUserByPhone(phone, verificationCode, password, confirmPassword);
+		if (map.get("error") != null) {
+			return new Response(new Status(400, "error"), map);
+		} else {
+			return new Response(new Status(201, "注册成功"), map);
+		}
+	}
+	
+	/*
 	 * 邮箱注册
 	 */
 	@RequestMapping(value="/users", params={"type=email"}, method=RequestMethod.POST)
@@ -111,6 +137,19 @@ public class UserController {
 		map.clear();
 		map.put("avatarUrl", avatarUrl);
 		return new Response(new Status(201, "更换用户头像成功"), map);
+	}
+	
+	/*
+	 * 手机验证重置密码
+	 */
+	@RequestMapping(value="/resetPassword", params = { "type=phone" })
+	public @ResponseBody Response resetPasswordByPhone(String phone, String verificationCode, String password, String confirmPassword) {
+		Map<String, Object> map = userService.resetPasswordByPhone(phone, verificationCode, password, confirmPassword);
+		if (map.get("error") != null) {
+			return new Response(new Status(400, "error"), map);
+		} else {
+			return new Response(new Status(201, "重置密码成功"), map);
+		}
 	}
 
 }

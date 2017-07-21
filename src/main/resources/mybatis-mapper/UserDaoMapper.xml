@@ -17,6 +17,14 @@
 		insert into user(name, password, avatar_url, birthday, email, activation_code, gmt_create, gmt_modified)
 		values(#{name}, #{password}, #{avatarUrl}, CURDATE(), #{email}, #{activationCode}, NOW(), NOW())
 	</insert>
+	
+	<insert id="insertUserTypePhone">
+		<selectKey resultType="int" order="AFTER" keyProperty="id">
+            select last_insert_id() as id
+        </selectKey>
+        insert into user(name, password, birthday, phone, gmt_create, gmt_modified)
+        values(#{name}, #{password}, #{birthday}, #{phone}, #{gmtCreate}, #{gmtModified})
+	</insert>
 
 	<select id="selectStatusByEmail" resultType="int">
 		select status from user where email = #{email}
@@ -55,6 +63,10 @@
 	
 	<update id="updateAvatarUrl">
 		update user set avatar_url=#{avatar_url} where id=#{id}
+	</update>
+	
+	<update id="updatePassword">
+		update user set password = #{password} where phone = #{phone}
 	</update>
 	
 </mapper>

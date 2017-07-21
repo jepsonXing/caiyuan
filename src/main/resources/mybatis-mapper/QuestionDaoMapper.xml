@@ -20,6 +20,14 @@
 	<insert id="insertQuestionImageUrl">
 		insert into question_image(question_id, image_url) values(#{questionId}, #{imageUrl})
 	</insert>
+	
+	<update id="updataScanCount">
+		updata question set scan_count = scan_count + 1 where id = #{id}
+	</update>
+	
+	<update id="updataAnswerCount">
+		updata question set answer_count = answer_count + 1 where id = #{id}
+	</update>
 
 	<select id="listNewQuestionByGmtModified" resultType="Question">
 		select id, user_id, user_name, topic_id, topic_name, title, content, scan_count, answer_count, gmt_create, gmt_modified

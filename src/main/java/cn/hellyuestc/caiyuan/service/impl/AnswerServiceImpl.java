@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import cn.hellyuestc.caiyuan.dao.AnswerDao;
 import cn.hellyuestc.caiyuan.dao.QuestionDao;
@@ -31,6 +32,7 @@ public class AnswerServiceImpl implements AnswerService {
 	@Autowired
 	private AnswerDao answerDao;
 
+	@Transactional
 	@Override
 	public Map<String, Object> addAnswer(long questionId, String content, HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<>();
@@ -67,6 +69,7 @@ public class AnswerServiceImpl implements AnswerService {
 		answer.setGmtCreate(MyUtil.formatDate(date, 1));
 		answer.setGmtModified(MyUtil.formatDate(date, 1));
 		
+		questionDao.updataAnswerCount(questionId);
 		long answerId = answerDao.insertAnswer(answer);
 		answer.setId(answerId);
 		
@@ -74,16 +77,19 @@ public class AnswerServiceImpl implements AnswerService {
 		return map;
 	}
 
+	@Transactional
 	@Override
-	public Map<String, Object> getQuestions(long questionId, String time, int count, String type) {
+	public Map<String, Object> getAnswers(long questionId, String time, int count, String type) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<Answer> answerList = new ArrayList<>();
 		
+		questionDao.updataScanCount(questionId);
+		
 		if (type.equals("new")) {
-			//获取更新的问题
+			//获取更新的回答
 			answerList = answerDao.listNewAnswerByGmtModified(questionId, time, count);
 		} else {
-			//获取下一页问题
+			//获取下一页回答
 			answerList = answerDao.listNextAnswerByGmtModified(questionId, time, count);
 		}
 		

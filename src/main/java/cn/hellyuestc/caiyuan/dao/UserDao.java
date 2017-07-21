@@ -12,6 +12,8 @@ public interface UserDao {
 	
 	void insertUser(User user);
 	
+	long insertUserTypePhone(User user);
+	
 	int selectStatusByEmail(String email);
 	
 	String selectActivationCodeByEmail(String email);
@@ -29,5 +31,7 @@ public interface UserDao {
 	User selectUserById(long id);
 	
 	void updateAvatarUrl(@Param("id") long id, @Param("avatar_url") String avatarUrl);
+	
+	void updatePassword(@Param("phone") String phone, @Param("password") String password);
 	
 }

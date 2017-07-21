@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import cn.hellyuestc.caiyuan.service.CommonService;
+import cn.hellyuestc.caiyuan.util.VerificationCodeSender;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
@@ -24,6 +25,31 @@ public class CommonServiceImpl implements CommonService {
 	@Autowired
 	private JedisPool jedisPool;
 
+	/*
+	 * 获取手机验证码
+	 */
+	@Override
+	public Map<String, Object> getVerificationCode(String phone) {
+		Map<String, Object> map = new HashMap<>();
+		
+		// 手机号格式不正确
+		Pattern pattern = Pattern.compile("^(13[0-9]|14[579]|15[0-3,5-9]|17[0135678]|18[0-9])\\d{8}$");
+		Matcher matcher = pattern.matcher(phone);
+		if (!matcher.matches()) {
+			map.put("error", "手机号格式错误");
+			return map;
+		}
+		
+		// 手机号格式正确，发送验证码
+		String verificationCode = VerificationCodeSender.sendVerificationCode(phone);
+		Jedis jedis = jedisPool.getResource();
+		jedis.set(verificationCode, phone, "NX", "EX", 60 * 5);
+		jedisPool.returnResource(jedis);
+		
+		map.put("ok", "验证码已发送");
+		return map;
+	}
+	
 	/*
 	 * 检查用户是否已登录
 	 */
@@ -35,7 +61,7 @@ public class CommonServiceImpl implements CommonService {
 		// 遍历cookies查找是否存在token
 		Cookie[] cookies = request.getCookies();
 		if (cookies == null) {
-			map.put("cookie-error", "cookie为空");
+			map.put("error", "cookie为空");
 			return map;
 		}
 
@@ -48,7 +74,7 @@ public class CommonServiceImpl implements CommonService {
 
 		// token不存在，未登录
 		if (token == null) {
-			map.put("token-error", "token不存在");
+			map.put("error", "token不存在");
 			return map;
 		}
 
@@ -58,7 +84,7 @@ public class CommonServiceImpl implements CommonService {
 		jedisPool.returnResource(jedis);
 		// token不正确，Redis中找不到相应键值对
 		if (userId == null) {
-			map.put("token-error", "无效的token");
+			map.put("error", "无效的token");
 			return map;
 		}
 		// token正确，找到对应的键值对
@@ -88,13 +114,13 @@ public class CommonServiceImpl implements CommonService {
 				Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
 		Matcher m = p.matcher(time.trim());
 		if (!m.find()) {
-			map.put("time-error", "请输入yyyy-MM-dd HH:MM:SS格式的时间戳");
+			map.put("error", "请输入yyyy-MM-dd HH:MM:SS格式的时间戳");
 			return map;
 		}
 
 		// count不合法
 		if ((count < 1) || (20 < count)) {
-			map.put("count-error", "count的范围需为1-20");
+			map.put("error", "count的范围需为1-20");
 			return map;
 		}
 

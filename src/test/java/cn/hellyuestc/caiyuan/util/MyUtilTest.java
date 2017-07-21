@@ -40,4 +40,9 @@ public class MyUtilTest {
 		} 
 	}
 	
+	@Test
+	public void test2() {
+		VerificationCodeSender.sendVerificationCode("18483661669");
+	}
+	
 }

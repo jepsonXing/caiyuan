@@ -9,6 +9,11 @@ import org.springframework.web.multipart.MultipartFile;
 public interface CommonService {
 	
 	/*
+	 * 获取手机验证码
+	 */
+	public Map<String, Object> getVerificationCode(String phone);
+	
+	/*
 	 * 检查用户是否已登录
 	 */
 	public Map<String, Object> getUserIdFromRedis(HttpServletRequest request);

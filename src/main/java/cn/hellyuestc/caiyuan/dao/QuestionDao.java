@@ -14,6 +14,10 @@ public interface QuestionDao {
 	
 	void insertQuestionImageUrl(@Param("questionId") long questionId,@Param("imageUrl")  String imageUrl);
 	
+	void updataScanCount(long id);
+	
+	void updataAnswerCount(long id);
+	
 	List<Question> listNewQuestionByGmtModified(@Param("time") String time, @Param("count") int count);
 
 	List<Question> listNextQuestionByGmtModified(@Param("time") String time, @Param("count") int count);

@@ -1,7 +1,5 @@
 package cn.hellyuestc.caiyuan.entity;
 
-import java.util.List;
-
 public class Question {
 
 	private long id;
@@ -11,6 +9,7 @@ public class Question {
 	private String topicName;
 	private String title;
 	private String content;
+	private byte isPublish;
 	private int scanCount;
 	private int answerCount;
 	private String gmtCreate;
@@ -70,6 +69,14 @@ public class Question {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public byte getIsPublish() {
+		return isPublish;
+	}
+
+	public void setIsPublish(byte isPublish) {
+		this.isPublish = isPublish;
 	}
 
 	public int getScanCount() {

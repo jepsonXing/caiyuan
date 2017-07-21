@@ -12,9 +12,9 @@ public interface AnswerService {
 	Map<String, Object> addAnswer(long questionId, String content, HttpServletRequest request);
 
 	/*
-	 * 获取问题（按时间排序）
+	 * 获取回答（按时间排序）
 	 */
-	Map<String, Object> getQuestions(long questionId, String time, int count, String type);
+	Map<String, Object> getAnswers(long questionId, String time, int count, String type);
 	
 	
 }

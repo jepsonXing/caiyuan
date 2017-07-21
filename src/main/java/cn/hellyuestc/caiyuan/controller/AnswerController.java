@@ -47,7 +47,7 @@ public class AnswerController {
  			return new Response(new Status(400, "error"), map);
  		}
  		
- 		map = answerService.getQuestions(questionId, time, count, "new");
+ 		map = answerService.getAnswers(questionId, time, count, "new");
  		return new Response(new Status(200, "ok"), map);
 	}
 
