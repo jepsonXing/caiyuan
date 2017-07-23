@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import cn.hellyuestc.caiyuan.entity.Question;
 import cn.hellyuestc.caiyuan.service.CommonService;
 import cn.hellyuestc.caiyuan.service.QuestionService;
 import cn.hellyuestc.caiyuan.service.TopicService;
@@ -31,20 +30,14 @@ public class QuestionController {
 	private CommonService commonService;
 	@Autowired
 	private QuestionService questionService;
-	@Autowired
-	private UserService userService;
-	@Autowired
-	private TopicService topicService;
 	
 	/*
 	 * 发布问题
 	 */
 	@RequestMapping(value="/questions", method=RequestMethod.POST)
 	@ResponseBody
-	public Response addQuestion(long userId, long topicId, String title, String content, HttpServletRequest request) {
-		Map<String, Object> map = new HashMap<>();
-		String userName = null;
-		String topicName = null;
+	public Response PublishQuestion(long topicId, String title, String content, HttpServletRequest request) {
+		Map<String, Object> map = null;
 		
 		map = commonService.getUserIdFromRedis(request);
 		
@@ -53,46 +46,98 @@ public class QuestionController {
 			return new Response(new Status(400, "error"), map);
 		}
 
-		long id = (long) map.get("userId");
+		long userId = (long) map.get("userId");
 		
-		if (id != userId) {
-			map.clear();
-			map.put("id-error", "请求的id与登陆的用户id不一致");
+		map = questionService.addQuestion(userId, topicId, title, content, (byte) 1);
+		if (map.get("question") == null) {
+			return new Response(new Status(400, "error"), map);
+		} else {
+			return new Response(new Status(201, "发布问题成功"), map);
+		}
+	}
+	
+	/*
+	 * 保存问题草稿
+	 */
+	@RequestMapping(value="/questionDrafts", method=RequestMethod.POST)
+	@ResponseBody
+	public Response saveQuestionToDraft(long topicId, String title, String content, HttpServletRequest request) {
+		Map<String, Object> map = null;
+		
+		map = commonService.getUserIdFromRedis(request);
+		
+		// 未登录
+		if (map.get("userId") == null) {
 			return new Response(new Status(400, "error"), map);
 		}
+
+		long userId = (long) map.get("userId");
 		
-		userName = userService.getNameById(userId);
-		// userId不存在
-		if (userName == null) {
-			map.put("userId-error", "用户id不存在");
+		map = questionService.addQuestion(userId, topicId, title, content, (byte) 0);
+		if (map.get("question") == null) {
+			return new Response(new Status(400, "error"), map);
+		} else {
+			return new Response(new Status(201, "保存问题草稿成功"), map);
+		}
+	}
+	
+	/*
+	 * 更新问题
+	 */
+	@RequestMapping(value="/questions/{id}", method=RequestMethod.POST)
+	@ResponseBody
+	public Response updateQuestion(@PathVariable("id") long questionId, String title, String content, HttpServletRequest request) {
+		Map<String, Object> map = null;
+		
+		map = commonService.getUserIdFromRedis(request);
+		
+		// 未登录
+		if (map.get("userId") == null) {
 			return new Response(new Status(400, "error"), map);
 		}
+
+		long userId = (long) map.get("userId");
 		
-		topicName = topicService.getNameById(topicId);
-		// topicId不存在
-		if (topicName == null) {
-			map.put("topicId-error", "话题id不存在");
+		map = questionService.updateQuestion(userId, questionId, title, content);
+		if (map.get("question") == null) {
+			return new Response(new Status(400, "error"), map);
+		} else {
+			return new Response(new Status(201, "更新问题成功"), map);
+		}
+	}
+	
+	/*
+	 * 更新问题草稿
+	 */
+	@RequestMapping(value="/questionDrafts/{id}", method=RequestMethod.POST)
+	@ResponseBody
+	public Response updateDraft(@PathVariable("id") long questionId, String title, String content, HttpServletRequest request) {
+		return updateQuestion(questionId, title, content, request);
+	}
+	
+	/*
+	 * 将草稿发布
+	 */
+	@RequestMapping(value="/questionDrafts/{id}", params={"field=isPublish"}, method=RequestMethod.GET)
+	@ResponseBody
+	public Response publishDraft(@PathVariable("id") long questionId, HttpServletRequest request) {
+		Map<String, Object> map = null;
+		
+		map = commonService.getUserIdFromRedis(request);
+		
+		// 未登录
+		if (map.get("userId") == null) {
 			return new Response(new Status(400, "error"), map);
 		}
+
+		long userId = (long) map.get("userId");
 		
-		// title长度不合法
-		if ((title == null) || (title.equals("")) || (100 < title.length())) {
-			map.put("title-error", "请输入1-100个字符的标题");
+		map = questionService.publishDraft(questionId, userId);
+		if (map.get("question") == null) {
 			return new Response(new Status(400, "error"), map);
+		} else {
+			return new Response(new Status(201, "发布问题成功"), map);
 		}
-		
-		// content长度超出范围
-		if ((content == null) || (content.equals("")) || (65535 < content.length())) {
-			map.put("title-error", "请输入1-65535个字符的内容");
-			return new Response(new Status(400, "error"), map);
-		}
-		
-		// 发布问题成功
-		Question question = questionService.publishQuestion(userId, userName, topicId, topicName, title, content);
-		
-		map.put("question", question);
-		
-		return new Response(new Status(201, "发布问题成功"), map);
 	}
 	
 	/*

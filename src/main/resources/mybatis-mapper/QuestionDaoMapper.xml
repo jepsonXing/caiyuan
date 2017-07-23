@@ -8,25 +8,52 @@
 	<select id="selectCountById" resultType="int">
 		select count(*) from question where id=#{id}
 	</select>
+	
+	<select id="selectUserIdById" resultType="long">
+		select user_id from question where id = #{id}
+	</select>
+	
+	<select id="selectTopicIdById" resultType="long">
+		select topic_id from question where id = #{id}
+	</select>
+	
+	<select id="selectQuestionById" resultType="Question">
+		select id, user_id, user_name, topic_id, topic_name, is_publish, title, content, scan_count, answer_count, gmt_create, gmt_modified
+		from question
+		where id = #{id}
+	</select>
 
-	<insert id="insertQuestion">
-		<selectKey resultType="int" order="AFTER" keyProperty="id">
-            select last_insert_id() as id
-        </selectKey>
-		insert into question(user_id, user_name, topic_id, topic_name, title, content, gmt_create, gmt_modified)
-		values(#{userId}, #{userName}, #{topicId}, #{topicName}, #{title}, #{content}, NOW(), NOW());
+	<insert id="insertQuestion" useGeneratedKeys="true" keyProperty="id">
+		insert into question(user_id, user_name, topic_id, topic_name, is_publish, title, content, gmt_create, gmt_modified)
+		values(#{userId}, #{userName}, #{topicId}, #{topicName}, #{isPublish}, #{title}, #{content}, #{gmtCreate}, #{gmtModified});
 	</insert>
 	
 	<insert id="insertQuestionImageUrl">
 		insert into question_image(question_id, image_url) values(#{questionId}, #{imageUrl})
 	</insert>
 	
+	<update id="updateQueston">
+		update question
+		set title = #{title},
+		content = #{content},
+		gmt_modified = now()
+		where id = #{id}
+	</update>
+	
 	<update id="updataScanCount">
-		updata question set scan_count = scan_count + 1 where id = #{id}
+		update question set scan_count = scan_count + 1 where id = #{id}
 	</update>
 	
 	<update id="updataAnswerCount">
-		updata question set answer_count = answer_count + 1 where id = #{id}
+		update question set answer_count = answer_count + 1 where id = #{id}
+	</update>
+	
+	<update id="updateIsPublishAndTime">
+		update question 
+		set is_publish = 1,
+		gmt_create = now(),
+		gmt_modified = now()
+		where id = #{id}
 	</update>
 
 	<select id="listNewQuestionByGmtModified" resultType="Question">

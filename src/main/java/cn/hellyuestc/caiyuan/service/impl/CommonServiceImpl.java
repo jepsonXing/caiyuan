@@ -88,7 +88,7 @@ public class CommonServiceImpl implements CommonService {
 			return map;
 		}
 		// token正确，找到对应的键值对
-		map.put("userId", userId);
+		map.put("userId", Long.parseLong(userId));
 		return map;
 	}
 

@@ -9,7 +9,7 @@ public class Question {
 	private String topicName;
 	private String title;
 	private String content;
-	private byte isPublish;
+	private int isPublish;
 	private int scanCount;
 	private int answerCount;
 	private String gmtCreate;
@@ -71,11 +71,11 @@ public class Question {
 		this.content = content;
 	}
 
-	public byte getIsPublish() {
+	public int getIsPublish() {
 		return isPublish;
 	}
 
-	public void setIsPublish(byte isPublish) {
+	public void setIsPublish(int isPublish) {
 		this.isPublish = isPublish;
 	}
 

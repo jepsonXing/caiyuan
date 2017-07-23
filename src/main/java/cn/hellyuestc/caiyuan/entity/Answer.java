@@ -7,6 +7,7 @@ public class Answer {
 	private String userName;
 	private String summary;
 	private String content;
+	private int isPublish;
 	private int likeCount;
 	private int unlikeCount;
 	private String gmtCreate;
@@ -58,6 +59,14 @@ public class Answer {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public int getIsPublish() {
+		return isPublish;
+	}
+
+	public void setIsPublish(int isPublish) {
+		this.isPublish = isPublish;
 	}
 
 	public int getLikeCount() {

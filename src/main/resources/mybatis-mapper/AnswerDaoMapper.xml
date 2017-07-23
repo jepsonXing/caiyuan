@@ -8,14 +8,29 @@
 	<select id="selectCountById" resultType="int">
 		select count(*) from answer where id=#{id}
 	</select>
+	
+	<select id="selectUserIdById" resultType="long">
+		select user_id from answer where id = #{id}
+	</select>
+	
+	<select id="selectAnswerById" resultType="Answer">
+		select id, question_id, user_id, user_name, summary, content, is_publish, like_count, unlike_count, gmt_create, gmt_modified
+		from answer
+		where id = #{id}
+	</select>
 
-	<insert id="insertAnswer">
-		<selectKey resultType="int" order="AFTER" keyProperty="id">
-            select last_insert_id() as id
-        </selectKey>
+	<insert id="insertAnswer" useGeneratedKeys="true" keyProperty="id">
         insert into answer(question_id, user_id, user_name, summary, content, like_count, unlike_count, gmt_create, gmt_modified)
-        values(#{questionId}, #{userId}, #{userName}, #{summary}, #{content}, #{likeCount}, #{unlikeCount}, now(), now())
+        values(#{questionId}, #{userId}, #{userName}, #{summary}, #{content}, #{likeCount}, #{unlikeCount}, #{gmtCreate}, #{gmtModified})
 	</insert>
+	
+	<update id="updateAnswer">
+		update answer
+		set summary = #{summary},
+		content = #{content},
+		gmt_modified = now()
+		where id = #{id}
+	</update>
 
 	<select id="listNewAnswerByGmtModified" resultType="Answer">
 		select id, question_id, user_id, user_name, summary, like_count, unlike_count, gmt_create, gmt_modified

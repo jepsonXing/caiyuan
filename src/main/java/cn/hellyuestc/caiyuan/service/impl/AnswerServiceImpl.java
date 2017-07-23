@@ -34,7 +34,7 @@ public class AnswerServiceImpl implements AnswerService {
 
 	@Transactional
 	@Override
-	public Map<String, Object> addAnswer(long questionId, String content, HttpServletRequest request) {
+	public Map<String, Object> addAnswer(long questionId, String content, int isPublish, HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<>();
 		Answer answer = null;
 		long userId = 0;
@@ -63,18 +63,80 @@ public class AnswerServiceImpl implements AnswerService {
 		userId = (long) map.get("userId");
 		answer.setUserId(userId);
 		answer.setUserName(userDao.selectNameById(userId));
+		answer.setIsPublish(isPublish);
 		answer.setLikeCount(0);
 		answer.setUnlikeCount(0);
 		Date date = new Date();
 		answer.setGmtCreate(MyUtil.formatDate(date, 1));
 		answer.setGmtModified(MyUtil.formatDate(date, 1));
 		
-		questionDao.updataAnswerCount(questionId);
-		long answerId = answerDao.insertAnswer(answer);
-		answer.setId(answerId);
+		if (isPublish == 1) {
+			questionDao.updataAnswerCount(questionId);
+		}
+		answerDao.insertAnswer(answer);
 		
 		map.put("answer", answer);
 		return map;
+	}
+	
+	@Override
+	public Map<String, Object> updateAnswer(long answerId, String content, HttpServletRequest request) {
+		Map<String, Object> map = null;
+		
+		map = commonService.getUserIdFromRedis(request);
+		if (map.get("userId") == null) {
+			return map;
+		}
+		long userId = (long) map.get("userId");
+		map.clear();
+		
+		long ownerId = answerDao.selectUserIdById(answerId);
+		if (userId != ownerId) {
+			map.put("error", "没有更新此问题的权限");
+			return map;
+		}
+		
+		// content长度超出范围
+		if ((content == null) || (content.equals("")) || (65535 < content.length())) {
+			map.put("error", "请输入1-65535个字符的内容");
+			return map;
+		}
+		
+		answerDao.updateAnswer(answerId, content.substring(0, 99), content);
+		
+		map.put("answer", answerDao.selectAnswerById(answerId));
+		return map;
+	}
+	
+	/*
+	 * 发布回答草稿
+	 */
+	@Transactional
+	@Override
+	public Map<String, Object> publishAnswerDraft(long answerDraftId, HttpServletRequest request) {
+		Map<String, Object> map = null;
+		
+		map = commonService.getUserIdFromRedis(request);
+		if (map.get("userId") == null) {
+			return map;
+		}
+		long userId = (long) map.get("userId");
+		map.clear();
+		
+		long ownerId = answerDao.selectUserIdById(answerDraftId);
+		if (userId != ownerId) {
+			map.put("error", "没有发布此问题草稿的权限");
+			return map;
+		}
+		
+//		questionDao.updataAnswerCount(id);
+		
+		
+		
+		
+		
+		
+		
 	}
 
 	@Transactional

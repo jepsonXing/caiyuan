@@ -14,26 +14,49 @@ import org.springframework.transaction.annotation.Transactional;
 
 import cn.hellyuestc.caiyuan.dao.QuestionDao;
 import cn.hellyuestc.caiyuan.dao.TopicDao;
+import cn.hellyuestc.caiyuan.dao.UserDao;
 import cn.hellyuestc.caiyuan.entity.Question;
 import cn.hellyuestc.caiyuan.service.QuestionService;
 import cn.hellyuestc.caiyuan.util.MyUtil;
+import cn.hellyuestc.caiyuan.util.Response;
+import cn.hellyuestc.caiyuan.util.Status;
 
 @Service
 public class QuestionServiceImpl implements QuestionService {
 
+	@Autowired
+	private UserDao userDao;
 	@Autowired
 	private QuestionDao questionDao;
 	@Autowired
 	private TopicDao topicDao;
 	
 	/*
-	 * 发布问题
+	 * 增加问题
 	 */
 	@Transactional
 	@Override
-	public Question publishQuestion(long userId, String userName, long topicId, String topicName, String title,
-			String content) {
+	public Map<String, Object> addQuestion(long userId, long topicId, String title, String content, byte isPublish) {
+		Map<String, Object> map = new HashMap<>();
 		Question question = new Question();
+		String userName = userDao.selectNameById(userId);
+		String topicName = topicDao.selectNameById(topicId);
+		
+		if (topicName == null) {
+			map.put("error", "不存在的topicId");
+		}
+		
+		// title长度不合法
+		if ((title == null) || (title.equals("")) || (100 < title.length())) {
+			map.put("error", "请输入1-100个字符的标题");
+			return map;
+		}
+		
+		// content长度超出范围
+		if ((content == null) || (content.equals("")) || (65535 < content.length())) {
+			map.put("error", "请输入1-65535个字符的内容");
+			return map;
+		}
 		
 		question.setUserId(userId);
 		question.setUserName(userName);
@@ -41,16 +64,22 @@ public class QuestionServiceImpl implements QuestionService {
 		question.setTopicName(topicName);
 		question.setTitle(title);
 		question.setContent(content);
-		question.setIsPublish((byte) 1); 
-		question.setGmtCreate(MyUtil.formatDate(new Date(), 1));
-		question.setGmtModified(MyUtil.formatDate(new Date(), 1));
+		question.setIsPublish(isPublish); 
+		question.setScanCount(0);
+		question.setAnswerCount(0);
+		Date date = new Date();
+		question.setGmtCreate(MyUtil.formatDate(date, 1));
+		question.setGmtModified(MyUtil.formatDate(date, 1));
 		
-		topicDao.updateQuestionCount(topicId);
-		long questionId = questionDao.insertQuestion(question);
-		question.setId(questionId);
+		if (isPublish == 1) {
+			topicDao.updateQuestionCount(topicId);
+		}
+		questionDao.insertQuestion(question);
 		
-		return question;
+		map.put("question", question);
+		return map;
 	}
+	
 	
 	/*
 	 * 增加问题图片
@@ -58,6 +87,63 @@ public class QuestionServiceImpl implements QuestionService {
 	@Override
 	public void addQuestionImage(long questionId, String imageUrl) {
 		questionDao.insertQuestionImageUrl(questionId, imageUrl);
+	}
+	
+	/*
+	 * 更新问题
+	 */
+	@Override
+	public Map<String, Object> updateQuestion(long userId, long questionId, String title, String content) {
+		Map<String, Object> map = new HashMap<>();
+		long ownerId = questionDao.selectUserIdById(questionId);
+		
+		// 没有修改此问题的权限
+		if (ownerId != userId) {
+			map.put("error", "没有修改此问题的权限");
+			return map;
+		}
+		
+		// title长度不合法
+		if ((title == null) || (title.equals("")) || (100 < title.length())) {
+			map.put("error", "请输入1-100个字符的标题");
+			return map;
+		}
+		
+		// content长度超出范围
+		if ((content == null) || (content.equals("")) || (65535 < content.length())) {
+			map.put("error", "请输入1-65535个字符的内容");
+			return map;
+		}
+		
+		// 更新成功
+		questionDao.updateQueston(questionId, title, content);
+		
+		map.put("question", questionDao.selectQuestionById(questionId));
+		return map;
+	}
+	
+	/*
+	 * 将草稿发布
+	 */
+	@Transactional
+	@Override
+	public Map<String, Object> publishDraft(long questionId, long userId) {
+		Map<String, Object> map = new HashMap<>();
+		long ownerId = questionDao.selectUserIdById(questionId);
+		
+		// 没有发布此问题的权限
+		if (ownerId != userId) {
+			map.put("error", "没有发布此问题的权限");
+			return map;
+		}
+		
+		// 发布问题
+		questionDao.updateIsPublishAndTime(questionId);
+		long topicId = questionDao.selectTopicIdById(questionId);
+		topicDao.updateQuestionCount(topicId);
+		
+		map.put("question", questionDao.selectQuestionById(questionId));
+		return map;
 	}
 	
 	/*

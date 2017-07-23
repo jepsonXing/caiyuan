@@ -10,13 +10,23 @@ public interface QuestionDao {
 	
 	int selectCountById(long id);
 	
-	long insertQuestion(Question question);
+	long selectUserIdById(long id);
+	
+	long selectTopicIdById(long id);
+	
+	Question selectQuestionById(long id);
+	
+	void insertQuestion(Question question);
 	
 	void insertQuestionImageUrl(@Param("questionId") long questionId,@Param("imageUrl")  String imageUrl);
+	
+	void updateQueston(@Param("id") long id, @Param("title") String title, @Param("content") String content);
 	
 	void updataScanCount(long id);
 	
 	void updataAnswerCount(long id);
+	
+	void updateIsPublishAndTime(long id);
 	
 	List<Question> listNewQuestionByGmtModified(@Param("time") String time, @Param("count") int count);
 

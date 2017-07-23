@@ -7,10 +7,20 @@ import javax.servlet.http.HttpServletRequest;
 public interface AnswerService {
 	
 	/*
-	 * 增加回答
+	 * 增加回答/回答草稿
 	 */
-	Map<String, Object> addAnswer(long questionId, String content, HttpServletRequest request);
+	Map<String, Object> addAnswer(long questionId, String content, int isPublish, HttpServletRequest request);
 
+	/*
+	 * 更新回答/回答草稿
+	 */
+	Map<String, Object> updateAnswer(long answerId, String content, HttpServletRequest request);
+	
+	/*
+	 * 发布回答草稿
+	 */
+	Map<String, Object> publishAnswerDraft(long answerDraftId, HttpServletRequest request);
+	
 	/*
 	 * 获取回答（按时间排序）
 	 */
